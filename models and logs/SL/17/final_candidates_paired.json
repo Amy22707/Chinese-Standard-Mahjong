@@ -1,0 +1,34 @@
+{
+  "e17_light": {
+    "baseline": "e16_light",
+    "paired_games": 8000,
+    "mean_score_delta": 0.277,
+    "win_pair_fraction": 0.172625,
+    "ci95_low": -0.22014062499999998,
+    "ci95_high": 0.768625
+  },
+  "e14_risk": {
+    "baseline": "e16_light",
+    "paired_games": 8000,
+    "mean_score_delta": 0.5175,
+    "win_pair_fraction": 0.204625,
+    "ci95_low": -0.011890624999999986,
+    "ci95_high": 1.0513906249999998
+  },
+  "e16_risk": {
+    "baseline": "e16_light",
+    "paired_games": 8000,
+    "mean_score_delta": 0.70925,
+    "win_pair_fraction": 0.088125,
+    "ci95_low": 0.37749375,
+    "ci95_high": 1.044375
+  },
+  "e17_risk": {
+    "baseline": "e16_light",
+    "paired_games": 8000,
+    "mean_score_delta": 0.75725,
+    "win_pair_fraction": 0.190875,
+    "ci95_low": 0.24460937500000002,
+    "ci95_high": 1.277878125
+  }
+}

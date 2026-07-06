@@ -1,0 +1,9 @@
+# Linux x86_64, Python 3.11, NVIDIA Blackwell / RTX 5090.
+# CUDA 12.8 is the minimum PyTorch build supporting sm_120.
+--index-url https://download.pytorch.org/whl/cu128
+--extra-index-url https://pypi.org/simple
+torch>=2.7,<3
+numpy==1.26.4
+PyMahjongGB==1.3.0
+PyYAML>=6.0,<7
+tensorboard>=2.15,<3

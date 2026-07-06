@@ -1,0 +1,2 @@
+﻿model,games,avg_score,avg_rank,win_rate,self_draw_rate,deal_in_rate,avg_deal_in_fan,big_deal_in_rate,draw_tenpai_rate,call_rate,mean_decision_ms,p95_game_decision_ms,max_decision_ms,invalid_or_timeout_rate
+candidate,2000,0.934,2.492,0.2525,0.078,0.1795,12.526462395543176,0.0015,0.725,0.025805299163234204,2.357627400562196,3.368552536703646,362.2337691485882,0.0025

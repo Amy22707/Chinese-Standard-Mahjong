@@ -1,0 +1,8 @@
+# Platform-neutral project dependencies.
+# Install PyTorch separately for the target accelerator first:
+#   NVIDIA CUDA/RTX 5090: pip install -r requirements-cuda.txt
+#   Ascend NPU:          pip install -r requirements-npu.txt
+numpy==1.26.4
+PyMahjongGB==1.3.0
+PyYAML>=6.0,<7
+tensorboard>=2.15,<3

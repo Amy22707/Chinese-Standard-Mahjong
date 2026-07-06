@@ -1,0 +1,14 @@
+__pycache__/
+.obsidian/
+*.pyc
+
+*.aux
+*.log
+*.out
+*.synctex.gz
+*.zip
+*.pkl
+*.pt
+
+assignmentP.md
+src/SL/data/data.txt

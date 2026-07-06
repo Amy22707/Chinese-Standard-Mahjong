@@ -1,0 +1,32 @@
+{
+  "seed": 20260706,
+  "device": "cuda",
+  "walls": 500,
+  "seats_per_wall": 4,
+  "postprocess": "light",
+  "opponent_postprocess": "light",
+  "tenpai_learned_weight": 0.6,
+  "normalize_discard_logits": false,
+  "fan_wait_weight": 0.0,
+  "risk_challenger": [
+    "candidate"
+  ],
+  "aux_rank_challenger": [],
+  "opponent_use_risk_head": false,
+  "opponent_use_aux_rank": false,
+  "max_steps": 500,
+  "bootstrap_samples": 5000,
+  "opponent": {
+    "path": "model/rtx5090/checkpoint/best.pkl",
+    "sha256": "aac83d00ea6d983674180765898d0b93ab95b6b55ff9fa064a2664f90dd9f1f5"
+  },
+  "challengers": [
+    {
+      "name": "candidate",
+      "path": "model/rtx5090/checkpoint/17.pkl",
+      "sha256": "1dc861efd1c87f025d9360afcebf7411553862a38cb1b7a939e280a75dbeca9c"
+    }
+  ],
+  "torch_version": "2.8.0+cu128",
+  "numpy_version": "1.26.4"
+}
