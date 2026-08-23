@@ -41,15 +41,42 @@ RL 部分位于 `src/RL`，实现 PPO 自博弈框架：
 ```text
 .
 ├── src/
-│   ├── SL/                 # 监督学习 Bot、特征、模型、训练和 Botzone 入口
-│   └── RL/                 # PPO 自博弈强化学习框架
+│   ├── SL/                              # 监督学习主线
+│   │   ├── __main__.py                  # Botzone 推理入口与轻量后处理
+│   │   ├── feature.py                   # 70 通道特征与时序信息构造
+│   │   ├── model.py                     # ResNet + GRU 多头策略网络
+│   │   ├── preprocess.py                # 牌谱预处理与结果加权
+│   │   ├── dataset.py                   # 数据加载、缓存与花色增强
+│   │   ├── supervised.py                # 监督训练入口
+│   │   ├── evaluate.py                  # 固定牌墙配对评测
+│   │   ├── evaluate_league.py           # 多模型联赛评测
+│   │   └── data/                        # 数据格式说明与示例；完整牌谱不入库
+│   └── RL/                              # PPO 自博弈强化学习实验
+│       ├── train.py                     # RL 训练入口
+│       ├── actor.py / learner.py        # 并行采样与策略更新
+│       ├── env.py                       # 国标麻将环境封装
+│       └── model_pool.py                # 历史对手模型池
 ├── docs/
-│   ├── mahjong_sl_report.tex
-│   ├── mahjong_sl_report.pdf
-│   └── deep-research-report.md
-├── models and logs/        # 不同版本 checkpoint 与实验代码备份
-├── requirements.txt
+│   ├── mahjong_sl_report.tex            # 课程报告 LaTeX 源码
+│   ├── mahjong_sl_report.pdf            # 课程报告成品
+│   ├── deep-research-report.md           # 麻将 AI 文献调研
+│   ├── sl_version_evaluation_guide.md    # SL 版本与评测记录
+│   └── Presentation_craft_final_bilingual.md  # IJCAI 中英文讲稿
+├── deliverables/
+│   ├── IJCAI_Mahjong_Final_Presentation.pdf  # 最终无 Backup 演示稿
+│   ├── IJCAI_Mahjong_Final_Presentation.tex  # 最终演示稿入口
+│   ├── IJCAI_Mahjong_Full_With_Backup.pdf    # 带 Backup 的完整版本
+│   ├── IJCAI_Mahjong_Full_With_Backup.tex    # Beamer 共享主源码
+│   └── data/                            # PPT 图表使用的精简 CSV
+├── models and logs/
+│   ├── SL/                              # 历史 SL 代码、训练记录与评测结果
+│   └── RL/                              # 历史 RL 代码与实验记录
+├── requirements.txt                     # 通用依赖
+├── requirements-cuda.txt                # NVIDIA CUDA 环境依赖
+├── requirements-npu.txt                 # Ascend NPU 环境依赖
+├── .gitignore                           # 数据、权重与构建产物忽略规则
 ├── LICENSE
+├── example.jpg
 └── README.md
 ```
 
@@ -146,7 +173,7 @@ RL 训练耗时远高于 SL。若只是复现实战提交，优先使用 SL chec
 - 实现 PPO 自博弈框架，为 SL 到 RL 的长期迁移预留接口。
 
 ## Bot实操展示
-![](https://ik.imagekit.io/Amyxue/Chinese_Standard_Mahjong/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20260620140036_972_514.png)
+![](https://ik.imagekit.io/Amyxue/Chinese_Standard_Mahjong/example.jpg)
 ## 参考资料
 
 - Suphx: Mastering Mahjong with Deep Reinforcement Learning.

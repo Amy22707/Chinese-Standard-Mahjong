@@ -1,0 +1,5 @@
+setting,y,mean,ci_low,ci_high
+refined_light,4,0.277,-0.220140625,0.768625
+earlier_risk,3,0.5175,-0.011890625,1.051390625
+baseline_risk,2,0.70925,0.37749375,1.044375
+refined_risk,1,0.75725,0.244609375,1.277878125

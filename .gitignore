@@ -3,12 +3,29 @@ __pycache__/
 *.pyc
 
 *.aux
+*.fdb_latexmk
+*.fls
 *.log
+*.nav
 *.out
+*.snm
 *.synctex.gz
+*.toc
+*.xdv
 *.zip
 *.pkl
 *.pt
+*.npy
+*.npz
+events.out.tfevents.*
+
+outputs/
+runs/
+wandb/
+
+# Local tooling metadata; this is a Python project.
+/package.json
+/*.base
 
 assignmentP.md
 src/SL/data/data.txt

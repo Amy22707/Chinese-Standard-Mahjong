@@ -1,0 +1,752 @@
+\documentclass[aspectratio=169,10pt]{beamer}
+
+\usepackage{fontspec}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\pgfplotsset{compat=1.18}
+
+\setsansfont{TeX Gyre Heros}
+\setmonofont{DejaVu Sans Mono}
+
+\definecolor{Navy}{HTML}{0B1F33}
+\definecolor{Ink}{HTML}{162B3A}
+\definecolor{Teal}{HTML}{00A7A5}
+\definecolor{TealDark}{HTML}{007C7A}
+\definecolor{Gold}{HTML}{E6A23C}
+\definecolor{Coral}{HTML}{D95F59}
+\definecolor{Mist}{HTML}{EEF4F7}
+\definecolor{PaleTeal}{HTML}{E8F6F5}
+\definecolor{Muted}{HTML}{617684}
+\definecolor{White}{HTML}{FFFFFF}
+
+\setbeamercolor{normal text}{fg=Ink,bg=White}
+\setbeamercolor{structure}{fg=TealDark}
+\setbeamercolor{frametitle}{fg=Navy,bg=White}
+\setbeamercolor{alerted text}{fg=Coral}
+\setbeamercolor{block title}{fg=White,bg=Navy}
+\setbeamercolor{block body}{fg=Ink,bg=Mist}
+\setbeamercolor{exampleblock title}{fg=White,bg=TealDark}
+\setbeamercolor{exampleblock body}{fg=Ink,bg=PaleTeal}
+
+\setbeamerfont{title}{size=\fontsize{27}{31}\selectfont,series=\bfseries}
+\setbeamerfont{subtitle}{size=\fontsize{13}{16}\selectfont}
+\setbeamerfont{author}{size=\fontsize{12}{14}\selectfont}
+\setbeamerfont{frametitle}{size=\fontsize{20}{23}\selectfont,series=\bfseries}
+\setbeamerfont{normal text}{size=\fontsize{12}{15}\selectfont}
+\setbeamerfont{block title}{size=\fontsize{12}{14}\selectfont,series=\bfseries}
+\setbeamerfont{block body}{size=\fontsize{11}{14}\selectfont}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamersize{text margin left=0.72cm,text margin right=0.72cm}
+\setbeamertemplate{itemize item}{\color{Teal}\raisebox{0.15ex}{\rule{0.7ex}{0.7ex}}}
+\setbeamertemplate{itemize subitem}{\color{Gold}\raisebox{0.2ex}{\rule{0.55ex}{0.55ex}}}
+\setlength{\leftmargini}{1.2em}
+\setlength{\leftmarginii}{1.0em}
+
+\setbeamertemplate{frametitle}{%
+  \vspace{0.26cm}
+  \insertframetitle\par
+  \vspace{0.10cm}
+  {\color{Teal}\rule{1.35cm}{1.5pt}}
+}
+
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=\paperwidth,ht=2.6ex,dp=1.1ex,rightskip=.72cm plus1fil]{normal text}%
+      \hfill\color{Muted}\fontsize{8}{9}\selectfont\insertframenumber
+    \end{beamercolorbox}%
+  }%
+}
+
+\newif\ifshortdeck
+\ifdefined\SHORTDECK
+  \shortdecktrue
+\else
+  \shortdeckfalse
+\fi
+
+\newif\ifnobackup
+\ifdefined\NOBACKUP
+  \nobackuptrue
+\else
+  \nobackupfalse
+\fi
+
+% The no-backup deck is intended for direct audience viewing.  A slightly
+% smaller frame title improves hierarchy and leaves more breathing room for
+% charts and explanatory text without changing the other deck variants.
+\ifnobackup
+  \setbeamerfont{title}{size=\fontsize{23}{27}\selectfont,series=\bfseries}
+  \setbeamerfont{frametitle}{size=\fontsize{17.5}{20.5}\selectfont,series=\bfseries}
+  \newcommand{\metricdisplayfont}{\fontsize{18.5}{21}\selectfont}
+  \newcommand{\stagedisplayfont}{\fontsize{17.5}{20}\selectfont}
+  \newcommand{\competitiondisplayfont}{\fontsize{22}{24}\selectfont}
+  \newcommand{\summarydisplayfont}{\fontsize{16.5}{20}\selectfont}
+  \newcommand{\arrowdisplayfont}{\fontsize{17}{19}\selectfont}
+\else
+  \newcommand{\metricdisplayfont}{\fontsize{22}{24}\selectfont}
+  \newcommand{\stagedisplayfont}{\fontsize{20}{22}\selectfont}
+  \newcommand{\competitiondisplayfont}{\fontsize{28}{30}\selectfont}
+  \newcommand{\summarydisplayfont}{\fontsize{19}{23}\selectfont}
+  \newcommand{\arrowdisplayfont}{\fontsize{20}{22}\selectfont}
+\fi
+
+\newcommand{\keypoint}[1]{{\color{TealDark}\bfseries #1}}
+\newcommand{\danger}[1]{{\color{Coral}\bfseries #1}}
+\newcommand{\metric}[2]{%
+  {\metricdisplayfont\bfseries\color{Navy}#1}\par
+  \vspace{0.06cm}
+  {\fontsize{9.5}{11}\selectfont\color{Muted}#2}\par
+}
+\newcommand{\source}[1]{%
+  \vfill
+  \ifnobackup\else
+    {\fontsize{6.8}{8}\selectfont\color{Muted}Evidence: #1\par}
+  \fi
+}
+\newcommand{\stage}[3]{%
+  \begin{minipage}[t]{0.38\linewidth}
+    \raggedright
+    {\fontsize{10}{12}\selectfont\color{Muted}#1}\par
+    \vspace{0.06cm}
+    {\stagedisplayfont\bfseries\color{#3}#2}
+  \end{minipage}
+}
+
+\title{Outcome-Weighted Risk-Aware\\Supervised Learning for\\Chinese Standard Mahjong}
+\subtitle{Improving offense-defense trade-offs under reproducible paired evaluation}
+\author{Zhiyao Xue}
+\institute{Peking University}
+\date{}
+
+\begin{document}
+
+% --------------------------------------------------------------------------
+\begin{frame}[plain,noframenumbering]
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[Navy] (current page.south west) rectangle (current page.north east);
+    \fill[Teal,opacity=0.16] ($(current page.north east)+(-1.6,-0.8)$) circle (2.25cm);
+    \fill[Gold,opacity=0.20] ($(current page.south east)+(-0.65,0.65)$) circle (1.35cm);
+    \draw[Teal,line width=2.2pt] ($(current page.north west)+(0.78,-0.92)$) -- ++(1.55,0);
+  \end{tikzpicture}
+
+  \vspace{0.55cm}
+  {\usebeamerfont{title}\color{White}\inserttitle\par}
+  \vspace{0.35cm}
+  {\usebeamerfont{subtitle}\color{Mist}\insertsubtitle\par}
+  \vfill
+  {\usebeamerfont{author}\color{White}\insertauthor\quad
+   \color{Teal}| \quad\color{White}\insertinstitute\par}
+  \note{This talk presents a competition-tested Chinese Standard Mahjong agent. The central idea is simple: do not imitate every recorded action equally. Use outcomes to reduce the influence of poor trajectories, then test the policy with a paired protocol that controls walls and seats.}
+\end{frame}
+
+% --------------------------------------------------------------------------
+\ifshortdeck\else
+\begin{frame}{Baseline architecture: a supervised policy}
+  \vspace{0.06cm}
+  \begin{tikzpicture}[
+      node distance=0.48cm,
+      box/.style={rounded corners=2pt,minimum height=1.12cm,
+                  text width=2.55cm,align=center,font=\small\bfseries},
+      arr/.style={-{Latex[length=2.2mm]},line width=0.9pt,draw=Muted}]
+    \node[box,fill=Mist,text=Navy] (data) {98,209 games\\champion Bot\\self-play};
+    \node[box,fill=PaleTeal,text=TealDark,right=of data] (state) {70-channel state\\$4\times9$ tile grid};
+    \node[box,fill=Mist,text=Navy,right=of state] (policy) {ResNet + multi-head\\supervised policy};
+    \node[box,fill=Navy,text=White,right=of policy] (action) {Legal mask\\235 action slots};
+    \draw[arr] (data) -- (state);
+    \draw[arr] (state) -- (policy);
+    \draw[arr] (policy) -- (action);
+  \end{tikzpicture}
+
+  \vspace{0.45cm}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.48\textwidth}
+      \keypoint{Structured visible state}\par
+      \vspace{0.14cm}
+      Hand, remaining tiles, four rivers and melds, wall progress, shanten, and fan-route cues.
+    \column{0.45\textwidth}
+      \keypoint{Directly executable policy}\par
+      \vspace{0.14cm}
+      One forward pass selects a legal action from 235 slots.
+  \end{columns}
+  \source{IJCAI 2020 champion-Bot dataset, project architecture report, and competition record.}
+  \note{The project starts from a supervised policy trained on 98,209 self-play games generated by the IJCAI 2020 champion Bot. Each state is encoded as a 70-channel tensor over a 4-by-9 tile grid. A ResNet and hierarchical policy heads map this structured visible state to 235 action slots, and a legal mask guarantees executable decisions.}
+\end{frame}
+\fi
+
+% --------------------------------------------------------------------------
+\begin{frame}{Why naive imitation still deals in}
+  \vspace{0.25cm}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.46\textwidth}
+      {\metricdisplayfont\bfseries\color{Coral}Observed failure}\par
+      \vspace{0.20cm}
+      High-cost deal-ins erased gains from otherwise effective offense.
+
+    \column{0.46\textwidth}
+      {\metricdisplayfont\bfseries\color{Navy}Learning mismatch}\par
+      \vspace{0.20cm}
+      Cross-entropy treated every logged action as equally valuable, despite different long-term returns.
+  \end{columns}
+
+  \vspace{0.58cm}
+  \begin{exampleblock}{The question that drives the redesign}
+    Not only \textbf{what} to imitate, but \keypoint{what deserves more weight}.
+  \end{exampleblock}
+  \source{Mahjong Competition Rules setting and project action/state design.}
+  \note{Early simulations exposed a specific failure: frequent deal-ins, especially against high-value hands, could cancel the benefit of aggressive play. Ordinary behavior cloning also assigns equal loss to actions from trajectories with very different long-term returns. The redesign therefore asks not only what to imitate, but which behavior deserves more weight.}
+\end{frame}
+
+% --------------------------------------------------------------------------
+\begin{frame}{Overall framework and three central innovations}
+  \vspace{0.20cm}
+  \begin{tikzpicture}[
+      node distance=0.46cm,
+      box/.style={rounded corners=2pt,minimum height=1.0cm,text width=2.15cm,
+                  align=center,font=\small\bfseries,draw=none},
+      arrow/.style={-{Latex[length=2.3mm]},line width=1.25pt,color=Muted}
+    ]
+    \node[box,fill=Mist,text=Navy] (logs) {Game logs\\all four players};
+    \node[box,fill=PaleTeal,text=TealDark,right=of logs] (weights) {Outcome-aware\\sample weights};
+    \node[box,fill=Mist,text=Navy,right=of weights] (policy) {ResNet + GRU\\masked policy};
+    \node[box,fill=PaleTeal,text=TealDark,right=of policy] (risk) {Risk-aware\\light inference};
+    \node[box,fill=Navy,text=White,right=of risk] (action) {Legal action\\235 slots};
+    \draw[arrow] (logs) -- (weights);
+    \draw[arrow] (weights) -- (policy);
+    \draw[arrow] (policy) -- (risk);
+    \draw[arrow] (risk) -- (action);
+  \end{tikzpicture}
+
+  \vspace{0.62cm}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.31\textwidth}
+      \keypoint{1. Outcome weighting}\par
+      \vspace{0.12cm}
+      {\fontsize{9.5}{12}\selectfont
+       Down-weight low-return and deal-in trajectories.}
+    \column{0.31\textwidth}
+      \keypoint{2. Temporal risk}\par
+      \vspace{0.12cm}
+      {\fontsize{9.5}{12}\selectfont
+       Track each opponent and the true discard order.}
+    \column{0.31\textwidth}
+      \keypoint{3. Paired evidence}\par
+      \vspace{0.12cm}
+      {\fontsize{9.5}{12}\selectfont
+       Control walls and seats before comparison.}
+  \end{columns}
+  \source{Project implementation: \texttt{preprocess.py}, \texttt{model.py}, \texttt{evaluate.py}.}
+  \note{The complete framework runs from logged games to outcome-aware weights, a sequence-aware masked policy, risk-constrained inference, and reproducible paired evaluation. The innovations are the supervision signal, opponent-specific temporal risk context, and the evaluation protocol.}
+\end{frame}
+
+% --------------------------------------------------------------------------
+\begin{frame}{Outcome weighting reduces low-return influence}
+  \vspace{0.05cm}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.58\textwidth}
+      \begin{block}{Per-player terminal return}
+        \[
+          r_p=\tanh\!\left(\frac{s_p}{32}\right)
+        \]
+      \end{block}
+      \vspace{0.10cm}
+      \begin{exampleblock}{Policy weight}
+        \centering
+        \resizebox{0.98\linewidth}{!}{$
+          w_p=w_{\mathrm{fan}}
+          \left(0.20+\dfrac{0.80}{1+\exp(-3r_p)}\right)
+          \times
+          \begin{cases}
+            0.20,& p\text{ dealt in}\\
+            1,& \text{otherwise}
+          \end{cases}
+        $}
+      \end{exampleblock}
+
+    \column{0.38\textwidth}
+      \vspace{0.10cm}
+      \keypoint{Preserve}\par
+      \vspace{0.12cm}
+      Useful defensive choices from non-winners.
+
+      \vspace{0.52cm}
+      \danger{Suppress}\par
+      \vspace{0.12cm}
+      Low-return trajectories and terminal deal-ins.
+  \end{columns}
+  \source{Exact weighting rule in \texttt{src/SL/preprocess.py}.}
+  \note{This is an AWR-lite weighting rule, not full offline RL. We keep all trajectories but scale their imitation loss. The terminal discarder receives an additional factor of 0.2. This addresses teacher noise while staying within supervised learning.}
+\end{frame}
+
+% --------------------------------------------------------------------------
+\ifshortdeck\else
+\begin{frame}{Risk is opponent-specific and time-sensitive}
+  \vspace{0.08cm}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.52\textwidth}
+      \begin{tikzpicture}[
+          opp/.style={rounded corners=2pt,minimum width=2.25cm,minimum height=.72cm,
+                      fill=Mist,text=Navy,font=\small\bfseries,align=center},
+          arr/.style={-{Latex[length=2mm]},line width=1.1pt,color=Muted}
+        ]
+        \node[opp] (o1) {Opponent 1\\river + melds};
+        \node[opp,below=.28cm of o1] (o2) {Opponent 2\\river + melds};
+        \node[opp,below=.28cm of o2] (o3) {Opponent 3\\river + melds};
+        \node[rounded corners=2pt,minimum width=2.35cm,minimum height=1.0cm,
+              fill=PaleTeal,text=TealDark,font=\small\bfseries,align=center,
+              right=1.05cm of o2] (risk) {Per-opponent\\risk and severity};
+        \draw[arr] (o1.east) -- (risk.west);
+        \draw[arr] (o2.east) -- (risk.west);
+        \draw[arr] (o3.east) -- (risk.west);
+      \end{tikzpicture}
+
+    \column{0.44\textwidth}
+      \keypoint{True table-wide order}\par
+      \vspace{0.14cm}
+      A GRU retains recency and post-meld evidence.
+
+      \vspace{0.52cm}
+      \keypoint{Light inference}\par
+      \vspace{0.14cm}
+      Risk only reranks close discard candidates.
+  \end{columns}
+  \source{Project implementation: per-opponent danger features, risk heads, and recency decay.}
+  \note{Earlier versions made a critical mistake: a tile discarded by one opponent was treated as safe against everyone. The final system models safety separately for each opponent and uses the true interleaved discard sequence.}
+\end{frame}
+\fi
+
+% --------------------------------------------------------------------------
+\ifshortdeck\else
+\def\trainingframetitle{Supervised training loss curve}
+\begin{frame}{\trainingframetitle}
+  \vspace{-0.10cm}
+  \centering
+      \begin{tikzpicture}
+        \begin{axis}[
+            width=0.80\textwidth,height=4.75cm,
+            xmin=1,xmax=18,ymin=0.30,ymax=0.82,
+            xtick={1,4,7,10,13,16,18},
+            ytick={0.3,0.4,0.5,0.6,0.7,0.8},
+            xlabel={Completed epoch},ylabel={Validation loss},
+            axis line style={Muted!65},tick style={Muted!65},
+            tick label style={font=\scriptsize,text=Muted},
+            label style={font=\small,text=Navy},
+            grid=major,grid style={Muted!16},
+            clip=false]
+          \addplot[Teal,line width=2.2pt,mark=*,mark size=1.5pt]
+            table[x=epoch,y=validation_loss,col sep=comma]
+            {data/training_validation_curve.csv};
+          \addplot[only marks,mark=*,mark size=3pt,Navy]
+            coordinates {(17,0.3425844097)};
+        \end{axis}
+      \end{tikzpicture}
+
+  \vspace{0.30cm}
+  {\fontsize{13}{16}\selectfont\bfseries\color{Navy}
+   Validation loss: \color{TealDark}0.77 $\rightarrow$ 0.34\color{Navy}\quad saturation near epoch 17.}
+  \source{Project supervised-training log.}
+  \note{The validation loss drops from 0.774 to 0.343 and then rises slightly. The curve shows stable optimization and convergence; final policy selection still relies on fixed-wall gameplay rather than validation loss alone.}
+\end{frame}
+\fi
+
+% --------------------------------------------------------------------------
+\begin{frame}{Paired evaluation controls wall and seat variance}
+  \vspace{0.08cm}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.59\textwidth}
+      \begin{tikzpicture}[
+          box/.style={rounded corners=2pt,minimum height=.85cm,text width=2.12cm,
+                      align=center,font=\small\bfseries},
+          arr/.style={-{Latex[length=2.2mm]},line width=1.2pt,color=Muted}
+        ]
+        \node[box,fill=Mist,text=Navy] (wall) {800 fixed walls};
+        \node[box,fill=PaleTeal,text=TealDark,right=.48cm of wall] (seat) {4 seats\\per wall};
+        \node[box,fill=Mist,text=Navy,right=.48cm of seat] (pair) {Paired score\\differences};
+        \node[box,fill=Navy,text=White,below=.55cm of seat] (boot) {10,000 bootstrap resamples};
+        \draw[arr] (wall) -- (seat);
+        \draw[arr] (seat) -- (pair);
+        \draw[arr] (pair.south) |- (boot.east);
+      \end{tikzpicture}
+
+    \column{0.37\textwidth}
+      \metric{3,200}{games per policy}
+      \vspace{0.28cm}
+      \metric{6,400}{total policy-games}
+      \vspace{0.28cm}
+      \metric{95\% CI}{bootstrap uncertainty}
+  \end{columns}
+
+  \vspace{0.36cm}
+  {\fontsize{10.2}{12.5}\selectfont
+   \textbf{\color{Navy}Primary statistic:}\quad
+   same wall, controlled seat, frozen opponents,\quad
+   $\Delta_i=\mathrm{score}_{\mathrm{final},i}-\mathrm{score}_{\mathrm{baseline},i}$.}
+  \source{Final paired-evaluation per-game CSV, summary, bootstrap output, and manifest.}
+  \note{Mahjong has high variance from the wall and seat. We therefore rotate the challenger through all four seats on identical walls. The paired score difference is bootstrapped 10,000 times. This is stronger evidence than an unpaired win rate.}
+\end{frame}
+
+% --------------------------------------------------------------------------
+\begin{frame}{Outcome weighting improved both score and risk}
+  \vspace{0.05cm}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.23\textwidth}
+      \metric{+1.039}{Avg. score (0.49 to 1.53)}
+    \column{0.23\textwidth}
+      \metric{+1.19 pp}{Win rate (24.53\% to 25.72\%)}
+    \column{0.23\textwidth}
+      \metric{-3.19 pp}{Deal-in rate (18.13\% to 14.94\%)}
+    \column{0.23\textwidth}
+      \metric{-0.059}{Avg. rank (2.500 to 2.441)}
+  \end{columns}
+
+  \vspace{0.68cm}
+  {\fontsize{12}{14}\selectfont\bfseries\color{Navy}
+   Paired average-score improvement}
+  \vspace{0.16cm}
+  \begin{tikzpicture}[x=1.28cm,y=1cm]
+    \draw[Muted,line width=1.0pt] (-0.4,0) -- (2.35,0);
+    \foreach \x in {0,1,2} {
+      \draw[Muted] (\x,-.07) -- (\x,.07);
+      \node[below=2mm,text=Muted,font=\scriptsize] at (\x,0) {\x};
+    }
+    \draw[Teal,line width=4.5pt] (0.153,0) -- (1.930,0);
+    \fill[Navy] (1.039,0) circle (.09);
+    \node[above=2.5mm,text=Navy,font=\small\bfseries] at (1.039,0) {$+1.039$};
+    \node[anchor=south west,xshift=1.5mm,yshift=2.0mm,
+          text=TealDark,font=\scriptsize] at (1.930,0) {95\% CI};
+    \draw[Coral,dashed,line width=.8pt] (0,-.25) -- (0,.34);
+  \end{tikzpicture}
+
+  \vspace{0.16cm}
+  {\fontsize{11}{13.5}\selectfont\bfseries\color{Navy}
+   Win rate rose while \color{TealDark}deal-in rate fell\color{Navy}; the paired CI stayed above zero.}
+  \source{Final paired evaluation, 800 walls $\times$ 4 seats per policy.}
+  \note{This is the headline result. The final policy gained 1.039 average score under the paired protocol. The interval excludes zero. At the same time, the win rate increased by 1.19 percentage points and the deal-in rate decreased by 3.19 points.}
+\end{frame}
+
+% --------------------------------------------------------------------------
+\begin{frame}{Ablation attributes the gain to the shared policy}
+  \vspace{0.05cm}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.58\textwidth}
+      \centering
+      \renewcommand{\arraystretch}{1.18}
+      \begin{tabular}{lrr}
+        \toprule
+        \textbf{Setting} & \textbf{Avg. score} & \textbf{Deal-in}\\
+        \midrule
+        Previous policy & 0.934 & 17.95\%\\
+        Outcome-weighted policy & 1.772 & 15.70\%\\
+        + action-value inference & 1.750 & 15.60\%\\
+        + all auxiliary controls & 1.796 & 15.50\%\\
+        \bottomrule
+      \end{tabular}
+      \vspace{0.15cm}
+      {\fontsize{7}{8}\selectfont\color{Muted}2,000 games per setting; point estimates shown.}
+
+    \column{0.38\textwidth}
+      \begin{block}{Robust contributor}
+        Outcome-weighted training changed the shared policy and produced the consistent gain.
+      \end{block}
+      \vspace{0.18cm}
+      \begin{exampleblock}{Negative result}
+        Action-value, expected-loss, and fan-route controls lacked reliable incremental evidence.
+      \end{exampleblock}
+  \end{columns}
+  \source{Six-setting ablation. Incremental auxiliary-control comparisons have CIs crossing zero.}
+  \note{The best point estimate comes from all heads, but the difference from outcome weighting alone is tiny and changes only a handful of games. We therefore disabled the unproven action-value and expected-loss controls in the final configuration.}
+\end{frame}
+
+% --------------------------------------------------------------------------
+\begin{frame}{Competition-tested, with a narrow claim}
+  \vspace{0.24cm}
+  \begin{columns}[c,onlytextwidth]
+    \column{0.43\textwidth}
+      \centering
+      {\competitiondisplayfont\bfseries\color{TealDark}9th / 16}\par
+      \vspace{0.08cm}
+      {\fontsize{10}{12}\selectfont\color{Muted}Competition final}
+
+    \column{0.43\textwidth}
+      \centering
+      {\competitiondisplayfont\bfseries\color{Navy}2.37 ms}\par
+      \vspace{0.08cm}
+      {\fontsize{10}{12}\selectfont\color{Muted}Mean decision time}
+  \end{columns}
+
+  \vspace{0.58cm}
+  \begin{exampleblock}{Supported conclusion}
+    The evidence supports a \keypoint{practical, low-cost improvement} of a supervised-learning Bot.
+  \end{exampleblock}
+  \vspace{0.62cm}
+  {\fontsize{10.5}{13}\selectfont\color{Ink}
+   \textbf{Evaluation boundary.}\quad No matched-data state-of-the-art comparison is claimed.}
+  \source{Competition record and final paired-evaluation manifest.}
+  \note{The optimized system placed ninth among sixteen teams in the final, while offline decisions averaged about 2.37 milliseconds. We do not claim a matched-data comparison against every external method. The evidence supports a practical, low-cost way to strengthen a supervised Mahjong Bot.}
+\end{frame}
+
+% --------------------------------------------------------------------------
+\begin{frame}{Three takeaways}
+  \vspace{0.14cm}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.41\textwidth}\vspace{0pt}
+      {\fontsize{12.5}{15}\selectfont\bfseries\color{Navy}1. Outcome-weighted imitation}
+    \column{0.53\textwidth}\vspace{0pt}
+      Reduce low-return and deal-in noise.
+  \end{columns}
+
+  \vspace{0.28cm}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.41\textwidth}\vspace{0pt}
+      {\fontsize{12.5}{15}\selectfont\bfseries\color{TealDark}2. Opponent-specific temporal risk}
+    \column{0.53\textwidth}\vspace{0pt}
+      Use opponent identity and discard order to recognize danger.
+  \end{columns}
+
+  \vspace{0.28cm}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.41\textwidth}\vspace{0pt}
+      {\fontsize{12.5}{15}\selectfont\bfseries\color{Navy}3. Matched-wall paired evidence}
+    \column{0.53\textwidth}\vspace{0pt}
+      Control wall and seat variance before policy comparison.
+  \end{columns}
+
+  \vspace{0.36cm}
+  \begin{exampleblock}{Next}
+    Richer data and augmentation $\cdot$ adaptive aggression $\cdot$ self-play reinforcement learning
+  \end{exampleblock}
+  \source{Project conclusions; future work follows directly from the ablation limitations.}
+  \note{The main lesson is to let supervised learning distinguish which behavior deserves more imitation. Next, we will expand the data and augmentation strategy, adapt aggression to the game state, and warm-start self-play reinforcement learning from the current supervised policy.}
+\end{frame}
+
+% --------------------------------------------------------------------------
+\begin{frame}{References}
+  \small
+  \begin{thebibliography}{9}
+    \setbeamertemplate{bibliography item}[text]
+    \bibitem{he2016deep}
+      K. He, X. Zhang, S. Ren, and J. Sun.
+      ``Deep Residual Learning for Image Recognition.''
+      \emph{CVPR}, 2016.
+    \bibitem{sup}
+      J. Li et al.
+      ``Suphx: Mastering Mahjong with Deep Reinforcement Learning.''
+      arXiv:2003.13590, 2020.
+    \bibitem{tjong}
+      W. Li et al.
+      ``Tjong: A Transformer-based Mahjong AI via Hierarchical
+      Decision-making and Fan Backward.''
+      \emph{CAAI Transactions on Intelligence Technology}, 2024.
+    \bibitem{silver2016mastering}
+      D. Silver et al.
+      ``Mastering the Game of Go with Deep Neural Networks and Tree Search.''
+      \emph{Nature}, 529(7587):484--489, 2016.
+  \end{thebibliography}
+\end{frame}
+
+% ==========================================================================
+\ifnobackup\else
+\appendix
+
+\begin{frame}{Backup: final inference configuration}
+  \vspace{0.08cm}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.52\textwidth}
+      \begin{block}{Enabled}
+        \begin{itemize}
+          \item Outcome-weighted policy checkpoint
+          \item Per-opponent risk head
+          \item Light post-processing
+          \item Learned tenpai weight = 1.0
+          \item Legal-action firewall
+        \end{itemize}
+      \end{block}
+    \column{0.44\textwidth}
+      \begin{exampleblock}{Disabled after ablation}
+        \begin{itemize}
+          \item Action-value inference
+          \item Expected-loss head control
+          \item Fan-route inference bonus
+          \item Auxiliary discard-rank control
+        \end{itemize}
+      \end{exampleblock}
+  \end{columns}
+  \vspace{0.30cm}
+  \textbf{Checkpoint SHA-256}\par
+  \vspace{0.08cm}
+  {\fontsize{7.8}{9.5}\selectfont\ttfamily
+   fa14dc7a045b9139fbc306668879d4073401a8f5251163e92d92920e7b7ef7dd}
+  \source{Final evaluation manifest and the submitted inference configuration.}
+\end{frame}
+
+\ifshortdeck
+\begin{frame}{Backup: validation loss fell steadily and then plateaued}
+  \vspace{-0.08cm}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.68\textwidth}
+      \centering
+      \begin{tikzpicture}
+        \begin{axis}[
+            width=\linewidth,height=5.0cm,
+            xmin=1,xmax=18,ymin=0.30,ymax=0.82,
+            xtick={1,4,7,10,13,16,18},
+            xlabel={Completed epoch},ylabel={Validation loss},
+            axis line style={Muted!65},tick style={Muted!65},
+            tick label style={font=\scriptsize,text=Muted},
+            label style={font=\small,text=Navy},
+            grid=major,grid style={Muted!16},clip=false]
+          \addplot[Teal,line width=2.2pt,mark=*,mark size=1.5pt]
+            table[x=epoch,y=validation_loss,col sep=comma]
+            {data/training_validation_curve.csv};
+          \addplot[only marks,mark=*,mark size=3pt,Navy]
+            coordinates {(17,0.3425844097)};
+          \node[anchor=south east,font=\scriptsize\bfseries,text=Navy,
+                fill=White,inner sep=1.2pt,xshift=-1.5mm,yshift=2.5mm]
+            at (axis cs:17,0.3425844097) {best: 0.343};
+        \end{axis}
+      \end{tikzpicture}
+    \column{0.28\textwidth}
+      \keypoint{Reading the curve}
+      \begin{itemize}
+        \item Stable convergence
+        \item Best at epoch 17
+        \item Slight final saturation
+      \end{itemize}
+  \end{columns}
+  \source{Earlier supervised-run log; convergence evidence only, not the final fine-tuning curve.}
+\end{frame}
+\fi
+
+\begin{frame}{Backup: paired tests separated robust gains from noise}
+  \vspace{-0.10cm}
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[
+        width=12.6cm,height=5.25cm,
+        xmin=-0.35,xmax=1.40,ymin=0.5,ymax=4.5,
+        xlabel={Paired average-score difference vs. baseline},
+        ytick={1,2,3,4},
+        yticklabels={Refined + risk,Baseline + risk,Earlier + risk,Refined / light},
+        axis line style={Muted!65},tick style={Muted!65},
+        tick label style={font=\scriptsize,text=Ink},
+        label style={font=\small,text=Navy},
+        xmajorgrids=true,grid style={Muted!14},
+        clip=false]
+      \addplot[only marks,mark=*,mark size=3.2pt,Navy,
+        error bars/.cd,x dir=both,x explicit]
+        table[x=mean,y=y,
+          x error plus expr=\thisrow{ci_high}-\thisrow{mean},
+          x error minus expr=\thisrow{mean}-\thisrow{ci_low},
+          col sep=comma]
+        {data/development_paired_ci.csv};
+      \draw[Coral,dashed,line width=1.1pt]
+        (axis cs:0,0.55) -- (axis cs:0,4.45);
+      \node[anchor=south west,font=\scriptsize,text=Coral]
+        at (axis cs:0.02,4.18) {no change};
+    \end{axis}
+  \end{tikzpicture}
+  \vspace{-0.22cm}
+  \parbox{0.88\textwidth}{\centering\fontsize{9.5}{12}\selectfont
+   Only two risk-adjusted candidates cleared zero; the light refinement did not.}
+  \source{Development-stage paired bootstrap results, 2,000 fixed walls $\times$ 4 seats per candidate. These are not the final headline-policy results.}
+  \note{This development comparison shows why confidence intervals matter. Point estimates favored every candidate, but only two risk-adjusted settings had intervals clearly above zero.}
+\end{frame}
+
+\begin{frame}{Backup: higher development score did not always mean safer play}
+  \vspace{-0.10cm}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.70\textwidth}
+      \centering
+      \begin{tikzpicture}
+        \begin{axis}[
+            width=\linewidth,height=5.25cm,
+            xmin=16.75,xmax=18.35,ymin=23.25,ymax=25.18,
+            xlabel={Deal-in rate (\%) --- safer to the left},
+            ylabel={Win rate (\%)},
+            axis line style={Muted!65},tick style={Muted!65},
+            tick label style={font=\scriptsize,text=Muted},
+            label style={font=\small,text=Navy},
+            grid=major,grid style={Muted!14},clip=false]
+          \addplot[only marks,mark=*,mark size=3.8pt,TealDark]
+            coordinates {(17.0375,23.4875) (16.9500,24.0375)};
+          \addplot[only marks,mark=triangle*,mark size=4.2pt,Gold]
+            coordinates {(17.5000,24.4875) (18.1625,24.9375) (18.0750,25.0000)};
+          \node[anchor=north west,font=\scriptsize,text=TealDark]
+            at (axis cs:17.0375,23.4875) {baseline};
+          \node[anchor=south west,font=\scriptsize,text=TealDark]
+            at (axis cs:16.9500,24.0375) {refined / light};
+          \node[anchor=south east,font=\scriptsize,text=Gold!80!black]
+            at (axis cs:17.50,24.4875) {risk-adjusted};
+          \node[anchor=north east,font=\scriptsize,text=Gold!80!black]
+            at (axis cs:18.075,25.0000) {best score $+0.76$};
+        \end{axis}
+      \end{tikzpicture}
+    \column{0.26\textwidth}
+      \keypoint{Development lesson}
+      \begin{itemize}
+        \item Light refinement moved left and up
+        \item Risk adjustment raised wins and score
+        \item But deal-in rate also rose
+      \end{itemize}
+  \end{columns}
+  \source{Development-stage candidate summary and per-game CSV, 8,000 games per candidate.}
+  \note{The scatter plot exposes the trade-off hidden by average score alone. Risk adjustment improved wins and score, but shifted the candidates to the right, toward more deal-ins. This motivated the later outcome-weighted training approach.}
+\end{frame}
+
+\begin{frame}{Backup: detailed final metrics}
+  \vspace{0.05cm}
+  \centering
+  \renewcommand{\arraystretch}{1.20}
+  \begin{tabular}{lrrr}
+    \toprule
+    \textbf{Metric} & \textbf{Old policy} & \textbf{Final policy} & \textbf{Change}\\
+    \midrule
+    Average score & 0.4941 & 1.5331 & +1.0391\\
+    Average rank (lower is better) & 2.5003 & 2.4411 & -0.0592\\
+    Win rate & 24.53\% & 25.72\% & +1.19 pp\\
+    Self-draw rate & 7.13\% & 7.53\% & +0.40 pp\\
+    Deal-in rate & 18.13\% & 14.94\% & -3.19 pp\\
+    Average deal-in fan & 12.45 & 12.41 & -0.04\\
+    Big deal-in rate & 0.094\% & 0.094\% & 0.00 pp\\
+    Mean decision time & 2.40 ms & 2.37 ms & -0.03 ms\\
+    Invalid/timeout rate & 0.875\% & 0.781\% & -0.094 pp\\
+    \bottomrule
+  \end{tabular}
+  \source{Final paired-evaluation summary CSV.}
+\end{frame}
+
+\begin{frame}{Backup: reproducibility package and remaining evidence}
+  \vspace{0.06cm}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.48\textwidth}
+      \keypoint{Already archived}
+      \begin{itemize}
+        \item Fixed seed and 800-wall protocol
+        \item Per-game CSV and summary CSV
+        \item Paired bootstrap JSON
+        \item Checkpoint hashes and software versions
+        \item Exact final inference switches
+      \end{itemize}
+    \column{0.48\textwidth}
+      \danger{Still needed for publication}
+      \begin{itemize}
+        \item Official leaderboard URL or screenshot
+        \item Commit hash and public release snapshot
+        \item CI-backed component ablations
+        \item Risk-calibration analysis
+        \item Two traceable decision case studies
+        \item KL-regularized self-play RL fine-tuning
+      \end{itemize}
+  \end{columns}
+  \source{Project data-requirements audit.}
+\end{frame}
+
+\fi
+
+\end{document}
