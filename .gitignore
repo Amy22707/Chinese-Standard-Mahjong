@@ -22,6 +22,10 @@ events.out.tfevents.*
 outputs/
 runs/
 wandb/
+/tmp/
+
+# Private manuscript drafts; keep them out of the public repository.
+/docs/paper/
 
 # Local tooling metadata; this is a Python project.
 /package.json
