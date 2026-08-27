@@ -1,0 +1,71 @@
+{
+  "seed": 2026091000,
+  "device": "cuda",
+  "walls": 1000,
+  "seats_per_wall": 4,
+  "postprocess": "light",
+  "opponent_postprocess": "light",
+  "raw_challenger": [],
+  "tenpai_learned_weight": 1.0,
+  "normalize_discard_logits": false,
+  "fan_wait_weight": 0.0,
+  "action_value_weight": 0.0,
+  "fan_route_weight": 0.0,
+  "use_expected_loss_head": false,
+  "risk_challenger": [
+    "risk_uncalibrated",
+    "risk_calibrated"
+  ],
+  "risk_calibration": {
+    "risk_calibrated": {
+      "path": "results/final_risk_calibrator.json",
+      "sha256": "3b3423c9a8f97fdcaeff412adce8c7b7227b82dd9338d68f5f2c07fed8064dd6",
+      "checkpoint_sha256": "fa14dc7a045b9139fbc306668879d4073401a8f5251163e92d92920e7b7ef7dd",
+      "method": "platt_scaling_positive_slope",
+      "fit_split": [
+        0.9,
+        0.95
+      ],
+      "parameters": {
+        "aggregate_risk": {
+          "scale": 0.9943473976753283,
+          "bias": -3.862367147059789
+        },
+        "opponent_risk": {
+          "scale": 0.9942562707973369,
+          "bias": -3.8867262705833343
+        },
+        "opponent_tenpai": {
+          "scale": 1.0437914900188805,
+          "bias": -1.5984239737774577
+        }
+      }
+    }
+  },
+  "aux_rank_challenger": [],
+  "opponent_use_risk_head": false,
+  "opponent_risk_calibration": null,
+  "opponent_use_aux_rank": false,
+  "max_steps": 500,
+  "bootstrap_samples": 10000,
+  "bootstrap_cluster": "wall",
+  "include_invalid_walls": false,
+  "opponent": {
+    "path": "../03_base_epoch16_reference/model.pkl",
+    "sha256": "aac83d00ea6d983674180765898d0b93ab95b6b55ff9fa064a2664f90dd9f1f5"
+  },
+  "challengers": [
+    {
+      "name": "risk_uncalibrated",
+      "path": "model.pkl",
+      "sha256": "fa14dc7a045b9139fbc306668879d4073401a8f5251163e92d92920e7b7ef7dd"
+    },
+    {
+      "name": "risk_calibrated",
+      "path": "model.pkl",
+      "sha256": "fa14dc7a045b9139fbc306668879d4073401a8f5251163e92d92920e7b7ef7dd"
+    }
+  ],
+  "torch_version": "2.8.0+cu128",
+  "numpy_version": "2.3.2"
+}

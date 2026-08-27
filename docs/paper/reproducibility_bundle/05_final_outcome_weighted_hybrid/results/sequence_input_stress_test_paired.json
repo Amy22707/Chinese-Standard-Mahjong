@@ -1,0 +1,12 @@
+{
+  "ordered_sequence": {
+    "baseline": "zero_sequence",
+    "paired_walls": 964,
+    "paired_games": 3856,
+    "excluded_walls": 36,
+    "mean_score_delta": 2.85554979253112,
+    "win_pair_fraction": 0.48443983402489627,
+    "ci95_low": 2.1146265560165975,
+    "ci95_high": 3.599598029045643
+  }
+}

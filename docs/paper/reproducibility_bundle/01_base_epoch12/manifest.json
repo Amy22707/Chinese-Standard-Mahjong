@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "paper_label": "Base-E12",
+  "role": "Early checkpoint for selection and local-opponent sensitivity",
+  "code_origin": "models and logs/SL/17",
+  "model_origin": "models and logs/SL/16_0704/checkpoint/12.pkl",
+  "model_file": "model.pkl",
+  "model_sha256": "aef268d81494e7b8c0855a21a3260aec219168cc380071f3c48729f36ebdc304",
+  "checkpoint_format": "full training checkpoint",
+  "model_tensor_count": 126,
+  "training_lineage": "shared base supervised run",
+  "checkpoint_index": 12,
+  "validation_epoch": 13,
+  "validation_loss": 0.36712095949276263,
+  "policy_accuracy": 0.8616827456385089
+}

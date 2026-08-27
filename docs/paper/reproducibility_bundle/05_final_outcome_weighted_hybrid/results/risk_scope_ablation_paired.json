@@ -1,0 +1,12 @@
+{
+  "opponent_specific": {
+    "baseline": "aggregate_risk",
+    "paired_walls": 975,
+    "paired_games": 3900,
+    "excluded_walls": 25,
+    "mean_score_delta": -0.1371794871794872,
+    "win_pair_fraction": 0.03282051282051282,
+    "ci95_low": -0.2969230769230769,
+    "ci95_high": 0.01616666666666648
+  }
+}

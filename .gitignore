@@ -1,8 +1,48 @@
+# Python caches, local environments, and test/build output
 __pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.venv/
+venv/
+env/
+build/
+dist/
+*.egg-info/
+
+# Editor and operating-system metadata
 .obsidian/
-*.pyc
+.vscode/
+.idea/
+.codex/
+.agents/
+*.swp
+*.swo
+*~
+*.bak
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Local secrets and machine-specific configuration
+.env
+.env.*
+!.env.example
 
 *.aux
+*.bbl
+*.bcf
+*.blg
 *.fdb_latexmk
 *.fls
 *.log
@@ -12,24 +52,79 @@ __pycache__/
 *.synctex.gz
 *.toc
 *.xdv
+*.run.xml
 *.zip
+*.7z
+*.tar
+*.tar.gz
+*.py36
 *.pkl
 *.pt
+*.pth
+*.ckpt
+*.onnx
+*.safetensors
 *.npy
 *.npz
+*.sqlite
+*.sqlite3
+*.db
+*-wal
+*-shm
 events.out.tfevents.*
 
 outputs/
+results/
+checkpoints/
+model/
 runs/
 wandb/
 /tmp/
 
-# Private manuscript drafts; keep them out of the public repository.
-/docs/paper/
+# Local development archive. Paper-facing checkpoint-bound snapshots and
+# reviewed evidence live in docs/paper/reproducibility_bundle instead.
+/models and logs/
+
+# Keep the manuscript draft private, but publish the paper-facing
+# reproducibility bundle used by the methods, tables, and archived commands.
+/docs/paper/*
+!/docs/paper/reproducibility_bundle/
+!/docs/paper/reproducibility_bundle/**/
+
+# Public bundle whitelist: documentation, executable source, manifests/results,
+# and the one small paper figure. Everything else under docs/paper stays private.
+!/docs/paper/reproducibility_bundle/**/*.md
+!/docs/paper/reproducibility_bundle/**/*.py
+!/docs/paper/reproducibility_bundle/**/*.json
+!/docs/paper/reproducibility_bundle/**/*.csv
+!/docs/paper/reproducibility_bundle/**/*.pdf
+
+# Git contains source, manifests, aggregate/per-game CSV/JSON evidence, and
+# small figures. Raw corpora, generated arrays, checkpoints, transient logs,
+# PID files, and smoke-test artifacts stay local or belong in a tagged release.
+/docs/paper/reproducibility_bundle/**/model.pkl
+/docs/paper/reproducibility_bundle/**/*.log
+/docs/paper/reproducibility_bundle/**/*.pid
+/docs/paper/reproducibility_bundle/**/__pycache__/
+/docs/paper/reproducibility_bundle/**/*.py[cod]
+/docs/paper/reproducibility_bundle/**/*smoke*
+/docs/paper/reproducibility_bundle/**/*.zip
+/docs/paper/reproducibility_bundle/**/results/final_risk_calibration.json
+/docs/paper/reproducibility_bundle/**/results/fresh_base_checkpoint_sweep_*
+!/docs/paper/reproducibility_bundle/03_base_epoch16_reference/base_training.log
+
+# Locally downloaded papers should be cited by URL/DOI instead of redistributed.
+/docs/reference/*.pdf
 
 # Local tooling metadata; this is a Python project.
 /package.json
 /*.base
 
 assignmentP.md
-src/SL/data/data.txt
+
+# Local Mahjong corpus and generated preprocessing artifacts.
+# Keep the small README/sample files in src/SL/data, but never commit the
+# private raw corpus or the generated per-match arrays/index.
+/src/SL/data/data.txt
+/src/SL/data/count.json
+/src/SL/data/*.npz

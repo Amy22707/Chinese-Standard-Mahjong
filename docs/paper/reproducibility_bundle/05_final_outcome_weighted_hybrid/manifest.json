@@ -1,0 +1,37 @@
+{
+  "schema_version": 3,
+  "paper_label": "Final-Hybrid",
+  "role": "Final outcome-weighted checkpoint and competition auxiliary controller",
+  "code_origin": "models and logs/SL/19",
+  "submission_archive": "models and logs/SL/6a4b8a991ba515095a18e8d2.py36",
+  "submission_source_check": "The pre-calibration snapshot matched version 19 after newline normalization; the current paper copy adds a disabled-by-default post-competition calibration hook",
+  "model_origin": "models and logs/SL/18/best18.pkl",
+  "model_file": "model.pkl",
+  "model_sha256": "fa14dc7a045b9139fbc306668879d4073401a8f5251163e92d92920e7b7ef7dd",
+  "checkpoint_format": "plain model state dictionary",
+  "model_tensor_count": 130,
+  "training_lineage": "12-epoch outcome-weighted continuation initialized from Base-E17; new heads initialized from scratch",
+  "fine_tuning_log_available": false,
+  "competition_system": "neural policy plus deterministic auxiliary controller",
+  "frozen_inference_configuration": {
+    "postprocess_mode": "light",
+    "use_risk_head": true,
+    "tenpai_learned_weight": 1.0,
+    "use_aux_rank": false,
+    "normalize_discard_logits": false,
+    "fan_wait_weight": 0.0,
+    "action_value_weight": 0.0,
+    "fan_route_weight": 0.0,
+    "use_expected_loss_head": false,
+    "use_risk_calibration": false,
+    "risk_calibration_note": "Post-hoc Platt calibration repaired probability reliability but reduced paired controller score by 0.261 (95% CI [-0.509, -0.010]); it is retained for analysis and not adopted for control.",
+    "max_sequence_length": 80
+  },
+  "post_competition_evidence": {
+    "controller_selection": "The original uncalibrated risk-aware controller had the highest fresh-wall score point estimate (1.458); versus raw argmax, paired delta +0.168, 95% CI [-0.220, 0.550].",
+    "final_vs_base_e17": "Paired delta +0.677, 95% CI [-0.139, 1.483] on 1000 fresh walls.",
+    "calibration_quality": "Aggregate-risk ECE 0.2600 to 0.00033 on a disjoint held-out split.",
+    "calibrated_controller": "Not adopted: paired delta -0.261, 95% CI [-0.509, -0.010].",
+    "result_directory": "results/"
+  }
+}

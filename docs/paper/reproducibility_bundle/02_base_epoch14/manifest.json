@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "paper_label": "Base-E14",
+  "role": "Intermediate checkpoint for selection and local-opponent sensitivity",
+  "code_origin": "models and logs/SL/17",
+  "model_origin": "models and logs/SL/16_0704/checkpoint/14.pkl",
+  "model_file": "model.pkl",
+  "model_sha256": "346b55d8d42ec5b6e8f8e43d0e3e4821138f92b6922e5d5264edf041c1bfa1ff",
+  "checkpoint_format": "full training checkpoint",
+  "model_tensor_count": 126,
+  "training_lineage": "shared base supervised run",
+  "checkpoint_index": 14,
+  "validation_epoch": 15,
+  "validation_loss": 0.3562050144493434,
+  "policy_accuracy": 0.8656223738613062
+}

@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "method": "platt_scaling_positive_slope",
+  "checkpoint": "/root/autodl-tmp/Chinese-Standard-Mahjong-Lab/docs/paper/reproducibility_bundle/05_final_outcome_weighted_hybrid/model.pkl",
+  "checkpoint_sha256": "fa14dc7a045b9139fbc306668879d4073401a8f5251163e92d92920e7b7ef7dd",
+  "fit_split": [
+    0.9,
+    0.95
+  ],
+  "parameters": {
+    "aggregate_risk": {
+      "scale": 0.9943473976753283,
+      "bias": -3.862367147059789,
+      "fit_log_loss": 0.07337374870886451,
+      "count": 2312726,
+      "positives": 44259,
+      "prevalence": 0.019137156757869284
+    },
+    "opponent_risk": {
+      "scale": 0.9942562707973369,
+      "bias": -3.8867262705833343,
+      "fit_log_loss": 0.030577812013494195,
+      "count": 6938178,
+      "positives": 44016,
+      "prevalence": 0.0063440286484434385
+    },
+    "opponent_tenpai": {
+      "scale": 1.0437914900188805,
+      "bias": -1.5984239737774577,
+      "fit_log_loss": 0.3040800258867131,
+      "count": 881925,
+      "positives": 149315,
+      "prevalence": 0.16930577996995208
+    }
+  }
+}

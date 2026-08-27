@@ -1,0 +1,21 @@
+{
+  "schema_version": 2,
+  "paper_label": "Base-E16/Reference",
+  "role": "Best-validation checkpoint and archived frozen opponent",
+  "code_origin": "models and logs/SL/17",
+  "model_origin": "models and logs/SL/16_0704/best16.pkl",
+  "model_file": "model.pkl",
+  "model_sha256": "aac83d00ea6d983674180765898d0b93ab95b6b55ff9fa064a2664f90dd9f1f5",
+  "checkpoint_format": "plain model state dictionary",
+  "model_tensor_count": 126,
+  "training_lineage": "shared base supervised run",
+  "checkpoint_index": 16,
+  "validation_epoch": 17,
+  "validation_loss": 0.3425844097294532,
+  "policy_accuracy": 0.8709200309254093,
+  "equivalent_full_checkpoint_origin": "models and logs/SL/16_0704/checkpoint/16.pkl",
+  "equivalent_full_checkpoint_sha256": "471d9670d085d9528b6da5ffed8e470440b1b8484b7c0850adcd4b08dc34e36f",
+  "equivalence_check": "All 126 serialized tensor-storage payload hashes are identical",
+  "training_log": "base_training.log",
+  "derived_training_curve": "base_training_curve.csv"
+}

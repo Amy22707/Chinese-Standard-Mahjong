@@ -8,70 +8,11 @@ from model import CNNModel
 import numpy as np
 import torch
 import os
-import sys
-import json
 
-# Best supported configuration after the fresh-wall controller and calibration
-# ablations: value_off (best18) + the original cost-sensitive learned-risk
-# scores.  Post-hoc Platt probabilities remain available for analysis but are
-# disabled here because direct substitution reduced paired average score.
-USE_AUX_RANK = False
-USE_RISK_HEAD = True
-RISK_HEAD_MODE = 'opponent'
-POSTPROCESS_MODE = 'light'
-TENPAI_LEARNED_WEIGHT = 1.0
-NORMALIZE_DISCARD_LOGITS = False
-FAN_WAIT_WEIGHT = 0.0
-ACTION_VALUE_WEIGHT = 0.0
-FAN_ROUTE_WEIGHT = 0.0
-USE_EXPECTED_LOSS_HEAD = False
+USE_AUX_RANK = os.environ.get('USE_AUX_RANK', '0') == '1'
+USE_RISK_HEAD = os.environ.get('USE_RISK_HEAD', '0') == '1'
+POSTPROCESS_MODE = os.environ.get('POSTPROCESS_MODE', 'light')
 MAX_SEQ_LEN = 80
-USE_RISK_CALIBRATION = False
-RISK_CALIBRATION = {
-    'aggregate_risk': {'scale': 1.0, 'bias': 0.0},
-    'opponent_risk': {'scale': 1.0, 'bias': 0.0},
-    'opponent_tenpai': {'scale': 1.0, 'bias': 0.0},
-}
-
-
-def _normalise_risk_calibration(config):
-    if config is None:
-        return None
-    if 'parameters' in config:
-        config = config['parameters']
-    required = ('aggregate_risk', 'opponent_risk', 'opponent_tenpai')
-    normalised = {}
-    for name in required:
-        if name not in config:
-            raise ValueError('risk calibrator missing %s' % name)
-        scale = float(config[name]['scale'])
-        bias = float(config[name]['bias'])
-        if not np.isfinite(scale) or scale <= 0 or not np.isfinite(bias):
-            raise ValueError('invalid risk calibrator parameters for %s' % name)
-        normalised[name] = {'scale': scale, 'bias': bias}
-    return normalised
-
-
-def read_risk_calibration(path):
-    with open(path, encoding='utf-8') as f:
-        return _normalise_risk_calibration(json.load(f))
-
-
-def set_risk_calibration(config=None):
-    global USE_RISK_CALIBRATION, RISK_CALIBRATION
-    normalised = _normalise_risk_calibration(config)
-    USE_RISK_CALIBRATION = normalised is not None
-    if normalised is not None:
-        RISK_CALIBRATION = normalised
-
-
-def _risk_probability(logit, name):
-    value = np.asarray(logit, dtype=np.float64)
-    if USE_RISK_CALIBRATION:
-        parameters = RISK_CALIBRATION[name]
-        value = parameters['scale'] * value + parameters['bias']
-    value = np.clip(value, -60.0, 60.0)
-    return 1.0 / (1.0 + np.exp(-value))
 
 
 def _discard_danger(agent, tile, aux = None):
@@ -94,19 +35,12 @@ def _discard_danger(agent, tile, aux = None):
         tenpai_prob.append(min(0.85, proxy))
     if USE_RISK_HEAD and aux is not None and idx < 34:
         if 'tenpai_opp' in aux and np.asarray(aux['tenpai_opp']).size == 3:
-            learned_tenpai = _risk_probability(
-                np.asarray(aux['tenpai_opp']).reshape(3), 'opponent_tenpai')
-            rule_tenpai = np.asarray(tenpai_prob)
-            tenpai_prob = ((1.0 - TENPAI_LEARNED_WEIGHT) * rule_tenpai
-                           + TENPAI_LEARNED_WEIGHT * learned_tenpai).tolist()
-        if (RISK_HEAD_MODE == 'opponent' and 'risk_opp' in aux and
-                np.asarray(aux['risk_opp']).size == 102):
-            learned = _risk_probability(
-                np.asarray(aux['risk_opp']).reshape(3, 34)[:, idx], 'opponent_risk')
+            tenpai_prob = (1.0 / (1.0 + np.exp(-np.asarray(aux['tenpai_opp']).reshape(3)))).tolist()
+        if 'risk_opp' in aux and np.asarray(aux['risk_opp']).size == 102:
+            learned = 1.0 / (1.0 + np.exp(-np.asarray(aux['risk_opp']).reshape(3, 34)[:, idx]))
             per_opp = [max(per_opp[p], float(learned[p])) for p in range(3)]
         elif 'risk' in aux:
-            aggregate_learned = float(_risk_probability(
-                aux['risk'][idx], 'aggregate_risk'))
+            aggregate_learned = float(1.0 / (1.0 + np.exp(-aux['risk'][idx])))
     per_opp = [p * (0.55 + 0.75 * tp) for p, tp in zip(per_opp, tenpai_prob)]
     probability = 1.0 - float(np.prod([1.0 - min(0.99, p) for p in per_opp]))
     if aggregate_learned is not None:
@@ -114,16 +48,6 @@ def _discard_danger(agent, tile, aux = None):
     if USE_RISK_HEAD and aux is not None and 'risk_loss' in aux and idx < 34:
         severity = float(1.0 / (1.0 + np.exp(-aux['risk_loss'][idx])))
         probability *= 0.65 + 0.70 * severity
-    if (USE_EXPECTED_LOSS_HEAD and aux is not None
-            and 'risk_opp' in aux and 'risk_loss_opp' in aux
-            and np.asarray(aux['risk_opp']).size == 102
-            and np.asarray(aux['risk_loss_opp']).size == 102):
-        hit = 1.0 / (1.0 + np.exp(-np.asarray(aux['risk_opp']).reshape(3, 34)[:, idx]))
-        loss = 1.0 / (1.0 + np.exp(-np.asarray(aux['risk_loss_opp']).reshape(3, 34)[:, idx]))
-        # Minimum hands still cost points; severity progressively represents
-        # the long tail of large MCR hands.
-        expected_loss = float(np.sum(hit * (0.25 + 0.75 * loss)))
-        probability = max(probability, min(1.0, expected_loss))
     return min(1.0, probability)
 
 
@@ -150,7 +74,6 @@ def _attack_context(agent):
         'best_flush_shanten': 13,
         'high_value': False,
         'pair_tiles': set(),
-        'flush_suit': None,
     }
     if not hasattr(agent, 'hand') or not hasattr(agent, 'packs'):
         return ctx
@@ -164,7 +87,6 @@ def _attack_context(agent):
         chiitoi_shanten = max(0, 6 - pairs)
 
         best_flush_shanten = 13
-        best_flush_suit = None
         for suit in 'WTB':
             suit_tiles = [t for t in agent.hand if t[0] == suit]
             for pack_type, tile, _ in agent.packs[0]:
@@ -176,10 +98,7 @@ def _attack_context(agent):
                         suit_tiles.extend([tile] * 3)
                     elif pack_type == 'GANG':
                         suit_tiles.extend([tile] * 4)
-            suit_shanten = max(0, 13 - len(suit_tiles))
-            if suit_shanten < best_flush_shanten:
-                best_flush_shanten = suit_shanten
-                best_flush_suit = suit
+            best_flush_shanten = min(best_flush_shanten, max(0, 13 - len(suit_tiles)))
 
         ctx.update({
             'shanten': max(0, shanten),
@@ -187,7 +106,6 @@ def _attack_context(agent):
             'best_flush_shanten': best_flush_shanten,
             'high_value': chiitoi_shanten <= 2 or best_flush_shanten <= 4,
             'pair_tiles': {tile for tile, cnt in hand_cnt.items() if cnt >= 2},
-            'flush_suit': best_flush_suit,
         })
     except Exception:
         pass
@@ -282,25 +200,6 @@ def _postprocess_action(agent, logits, mask, aux = None):
     legal_logits[~legal_mask] = -np.inf
     raw_best = int(legal_logits.argmax())
 
-    # Optional scale calibration.  Checkpoints can have very different logit
-    # magnitudes, while the hand-written offence/risk terms have a fixed scale.
-    # Normalising only legal discards makes those terms comparable without
-    # disturbing the policy's preference for calls versus discards.
-    if NORMALIZE_DISCARD_LOGITS:
-        discard_legal = legal_mask[play_begin:chi_begin]
-        values = raw[play_begin:chi_begin][discard_legal]
-        if values.size >= 2:
-            mean = float(values.mean())
-            std = float(values.std())
-            if std > 1e-6:
-                calibrated = (raw[play_begin:chi_begin] - mean) / std
-                adjusted[play_begin:chi_begin][discard_legal] = calibrated[discard_legal]
-
-    if ACTION_VALUE_WEIGHT > 0 and aux is not None and 'action_value' in aux:
-        q = np.tanh(np.asarray(aux['action_value']).reshape(-1))
-        if q.size == adjusted.size:
-            adjusted[legal_mask] += ACTION_VALUE_WEIGHT * q[legal_mask]
-
     # Balanced risk control: still push good hands, but avoid obvious far-hand deals.
     for tile, idx in FeatureAgent.OFFSET_TILE.items():
         a = play_begin + idx
@@ -328,16 +227,6 @@ def _postprocess_action(agent, logits, mask, aux = None):
                 remaining_waits = sum(max(0, 4 - agent.hand.count(w) - agent.shownTiles[w])
                                       for w in info['legal_waits'])
                 adjusted[a] += 0.22 + 0.08 * min(6, remaining_waits)
-                # Two equally wide waits are not equivalent in MCR: reward the
-                # route that wins more fan, but use log scaling so one rare huge
-                # hand cannot dominate the policy.
-                fan_mass = 0.0
-                for wait in info['legal_waits']:
-                    remaining = max(0, 4 - agent.hand.count(wait) - agent.shownTiles[wait])
-                    fan = max(8, int(info['wait_fan'].get(wait, 8)))
-                    fan_mass += remaining * np.log2(fan / 8.0)
-                fan_quality = fan_mass / max(1, remaining_waits)
-                adjusted[a] += FAN_WAIT_WEIGHT * min(4.0, fan_quality)
             else:
                 adjusted[a] -= 0.55  # nominal tenpai but cannot yet make eight fan
 
@@ -383,28 +272,6 @@ def _postprocess_action(agent, logits, mask, aux = None):
                 a = play_begin + FeatureAgent.OFFSET_TILE[tile]
                 if legal_mask[a]:
                     adjusted[a] -= 0.5
-    # Route head is deliberately advisory: it preserves structures rather than
-    # forcing a route.  Enable only after the new head has been trained.
-    if FAN_ROUTE_WEIGHT > 0 and aux is not None and 'fan_route' in aux:
-        route_logits = np.asarray(aux['fan_route']).reshape(-1)
-        if route_logits.size == 5:
-            route_prob = np.exp(route_logits - route_logits.max())
-            route_prob /= max(1e-6, route_prob.sum())
-            route = int(route_prob.argmax())
-            strength = FAN_ROUTE_WEIGHT * float(route_prob[route])
-            for tile, idx in FeatureAgent.OFFSET_TILE.items():
-                a = play_begin + idx
-                if not legal_mask[a]:
-                    continue
-                count = agent.hand.count(tile) if hasattr(agent, 'hand') else 0
-                if route == 1 and count >= 2:       # seven pairs: preserve pairs
-                    adjusted[a] -= strength
-                elif route == 2 and ctx['flush_suit']:
-                    adjusted[a] += strength * (0.45 if tile[0] != ctx['flush_suit'] and tile[0] not in 'FJ' else -0.20)
-                elif route == 3 and count >= 2:     # triplet route: preserve pairs/triplets
-                    adjusted[a] -= 0.70 * strength
-                elif route == 4 and tile[0] in 'FJ':
-                    adjusted[a] -= 0.60 * strength
     adjusted[~legal_mask] = -np.inf
     final_action = int(adjusted.argmax())
 
@@ -459,69 +326,39 @@ def _fallback_draw_response(obs):
     return 'PASS'
 
 def obs2response(model, obs):
-    legal_mask = obs['action_mask'].astype(bool)
-    try:
-        with torch.no_grad():
-            seq_tile, seq_player = _discard_sequence_tensors(agent)
-            input_dict = {
-                'observation': torch.from_numpy(np.expand_dims(obs['observation'], 0)),
-                'action_mask': torch.from_numpy(np.expand_dims(obs['action_mask'], 0)),
-                'discard_seq': torch.from_numpy(np.expand_dims(seq_tile, 0)),
-                'discard_player': torch.from_numpy(np.expand_dims(seq_player, 0)),
-            }
-            if USE_AUX_RANK or USE_RISK_HEAD:
-                logits, aux = model(input_dict, return_aux = True)
-                aux_np = {k: v.detach().cpu().reshape(-1).tolist() for k, v in aux.items()}
-            else:
-                logits = model(input_dict)
-                aux_np = None
-        # Convert through Python values to avoid cross-module ndarray identity
-        # conflicts between PyTorch, NumPy and the compiled Mahjong extension.
-        logits_np = np.asarray(
-            logits.detach().cpu().reshape(-1).tolist(), dtype=np.float32)
-        action = _postprocess_action(agent, logits_np, obs['action_mask'], aux_np)
-        # Final legality firewall: no post-processing bug may emit an illegal
-        # action.  Fall back to the model's best legal action if necessary.
-        if action < 0 or action >= len(legal_mask) or not legal_mask[action]:
-            masked = logits_np.copy()
-            masked[~legal_mask] = -np.inf
-            action = int(masked.argmax())
-    except Exception as exc:
-        print('INFO inference fallback: %s' % exc, file = sys.stderr)
-        hu = FeatureAgent.OFFSET_ACT['Hu']
-        play_begin = FeatureAgent.OFFSET_ACT['Play']
-        chi_begin = FeatureAgent.OFFSET_ACT['Chi']
-        if hu < len(legal_mask) and legal_mask[hu]:
-            action = hu
+    with torch.no_grad():
+        seq_tile, seq_player = _discard_sequence_tensors(agent)
+        input_dict = {
+            'observation': torch.from_numpy(np.expand_dims(obs['observation'], 0)),
+            'action_mask': torch.from_numpy(np.expand_dims(obs['action_mask'], 0)),
+            'discard_seq': torch.from_numpy(np.expand_dims(seq_tile, 0)),
+            'discard_player': torch.from_numpy(np.expand_dims(seq_player, 0)),
+        }
+        if USE_AUX_RANK or USE_RISK_HEAD:
+            logits, aux = model(input_dict, return_aux = True)
+            aux_np = {k: v.numpy().reshape(-1) for k, v in aux.items()}
         else:
-            legal_plays = np.flatnonzero(legal_mask[play_begin:chi_begin])
-            if len(legal_plays):
-                action = play_begin + int(legal_plays[0])
-            elif legal_mask[FeatureAgent.OFFSET_ACT['Pass']]:
-                action = FeatureAgent.OFFSET_ACT['Pass']
-            else:
-                legal = np.flatnonzero(legal_mask)
-                action = int(legal[0]) if len(legal) else FeatureAgent.OFFSET_ACT['Pass']
-    return agent.action2response(action)
+            logits = model(input_dict)
+            aux_np = None
+    action = _postprocess_action(agent, logits.numpy().flatten(), obs['action_mask'], aux_np)
+    response = agent.action2response(action)
+    return response
+
+import sys
 
 if __name__ == '__main__':
-    calibration_path = os.environ.get('RISK_CALIBRATION_PATH')
-    if calibration_path:
-        set_risk_calibration(read_risk_calibration(calibration_path))
     model = CNNModel()
-    data_dir = os.environ.get('MODEL_PATH', '/data/best18.pkl')
+    data_dir = os.environ.get('MODEL_PATH', os.path.join(os.path.dirname(__file__), 'model.pkl'))
     state = torch.load(data_dir, map_location = torch.device('cpu'))
     if isinstance(state, dict) and 'model' in state:
         state = state['model']
     current = model.state_dict()
     compatible = {k: v for k, v in state.items() if k in current and current[k].shape == v.shape}
-    missing = sorted(set(current) - set(compatible))
-    unexpected = sorted(set(state) - set(compatible))
-    if missing or unexpected:
-        raise RuntimeError(
-            'Final checkpoint mismatch: %d missing and %d unexpected tensors' %
-            (len(missing), len(unexpected)))
-    model.load_state_dict(compatible)
+    skipped = len(state) - len(compatible)
+    current.update(compatible)
+    model.load_state_dict(current)
+    if skipped:
+        print('INFO skipped %d incompatible checkpoint tensors' % skipped, file = sys.stderr)
     model.eval()
     zimo = False
     angang = None

@@ -509,7 +509,7 @@ if __name__ == '__main__':
     if calibration_path:
         set_risk_calibration(read_risk_calibration(calibration_path))
     model = CNNModel()
-    data_dir = os.environ.get('MODEL_PATH', '/data/best18.pkl')
+    data_dir = os.environ.get('MODEL_PATH', os.path.join(os.path.dirname(__file__), 'model.pkl'))
     state = torch.load(data_dir, map_location = torch.device('cpu'))
     if isinstance(state, dict) and 'model' in state:
         state = state['model']

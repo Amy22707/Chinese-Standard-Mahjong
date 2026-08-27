@@ -1,0 +1,12 @@
+{
+  "risk_calibrated": {
+    "baseline": "risk_uncalibrated",
+    "paired_walls": 971,
+    "paired_games": 3884,
+    "excluded_walls": 29,
+    "mean_score_delta": -0.2613285272914521,
+    "win_pair_fraction": 0.09680741503604531,
+    "ci95_low": -0.5085028321318228,
+    "ci95_high": -0.00977729145211132
+  }
+}

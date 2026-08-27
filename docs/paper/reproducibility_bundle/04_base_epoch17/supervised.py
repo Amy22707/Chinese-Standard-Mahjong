@@ -6,8 +6,6 @@ import torch
 import argparse
 import os
 import time
-import random
-import numpy as np
 
 
 def get_device(preferred):
@@ -60,8 +58,6 @@ def conditional_subaction_loss(model, logits, target, wt_norm):
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--epochs', type = int, default = 32)
-    parser.add_argument('--seed', type = int, default = 20261001,
-                        help = 'training/DataLoader seed for controlled ablations')
     parser.add_argument('--batch-size', type = int, default = 2048)
     parser.add_argument('--lr', type = float, default = 1e-3)
     parser.add_argument('--min-lr', type = float, default = 1e-5)
@@ -77,10 +73,8 @@ def parse_args():
     parser.add_argument('--risk-loss-weight', type = float, default = 0.15)
     parser.add_argument('--risk-opp-loss-weight', type = float, default = 0.20)
     parser.add_argument('--risk-severity-loss-weight', type = float, default = 0.10)
-    parser.add_argument('--risk-severity-opp-loss-weight', type = float, default = 0.10)
     parser.add_argument('--tenpai-opp-loss-weight', type = float, default = 0.10)
     parser.add_argument('--fan-route-loss-weight', type = float, default = 0.05)
-    parser.add_argument('--action-value-loss-weight', type = float, default = 0.20)
     parser.add_argument('--weighted-sampler', action = 'store_true',
                         help = 'oversample high-weight/high-score samples instead of only weighting the loss')
     parser.add_argument('--split-ratio', type = float, default = 0.9)
@@ -106,11 +100,6 @@ def parse_args():
  
 if __name__ == '__main__':
     args = parse_args()
-    random.seed(args.seed)
-    np.random.seed(args.seed)
-    torch.manual_seed(args.seed)
-    if torch.cuda.is_available():
-        torch.cuda.manual_seed_all(args.seed)
     checkpoint_dir = os.path.join(args.logdir, 'checkpoint')
     os.makedirs(checkpoint_dir, exist_ok = True)
     device = get_device(args.device)
@@ -266,17 +255,10 @@ if __name__ == '__main__':
                 risk_severity_loss = F.smooth_l1_loss(
                     aux_pred['risk_loss'].sigmoid()[play_legal],
                     aux_target['risk_loss'].float()[play_legal])
-                risk_severity_opp_loss = F.smooth_l1_loss(
-                    aux_pred['risk_loss_opp'].sigmoid()[opp_mask],
-                    aux_target['risk_loss_opp'].float()[opp_mask])
             else:
                 risk_opp_loss = logits.new_tensor(0.0)
                 risk_severity_loss = logits.new_tensor(0.0)
-                risk_severity_opp_loss = logits.new_tensor(0.0)
             fan_route_loss = F.cross_entropy(aux_pred['fan_route'], aux_target['fan_route'].long())
-            chosen_value = aux_pred['action_value'].gather(1, target.unsqueeze(1)).squeeze(1)
-            action_value_loss = F.smooth_l1_loss(
-                chosen_value.tanh(), aux_target['score'].float())
             tenpai_target = aux_target['tenpai_opp'].float()
             tenpai_pos = tenpai_target.sum().clamp(min = 1.0)
             tenpai_neg = tenpai_target.numel() - tenpai_pos
@@ -293,10 +275,8 @@ if __name__ == '__main__':
                     + args.risk_loss_weight * risk_loss
                     + args.risk_opp_loss_weight * risk_opp_loss
                     + args.risk_severity_loss_weight * risk_severity_loss
-                    + args.risk_severity_opp_loss_weight * risk_severity_opp_loss
                     + args.tenpai_opp_loss_weight * tenpai_opp_loss
-                    + args.fan_route_loss_weight * fan_route_loss
-                    + args.action_value_loss_weight * action_value_loss)
+                    + args.fan_route_loss_weight * fan_route_loss)
             if i % 128 == 0:
                 elapsed = max(1e-6, time.perf_counter() - epoch_start)
                 print('Iteration %d/%d'%(i, len(trainDataset) // args.batch_size + 1),
@@ -307,9 +287,7 @@ if __name__ == '__main__':
                       'shanten_loss', shanten_loss.item(), 'discard_rank_loss', discard_rank_loss.item(),
                       'risk_loss', risk_loss.item(), 'risk_opp_loss', risk_opp_loss.item(),
                       'risk_severity_loss', risk_severity_loss.item(),
-                      'risk_severity_opp_loss', risk_severity_opp_loss.item(),
                       'tenpai_opp_loss', tenpai_opp_loss.item(), 'fan_route_loss', fan_route_loss.item(),
-                      'action_value_loss', action_value_loss.item(),
                       flush = True)
             optimizer.zero_grad(set_to_none = True)
             scaler.scale(loss).backward()
@@ -325,8 +303,6 @@ if __name__ == '__main__':
         risk_tp = risk_fp = risk_fn = 0
         tenpai_tp = tenpai_fp = tenpai_fn = 0
         risk_severity_abs = risk_severity_n = 0
-        action_value_abs = action_value_n = 0
-        fan_route_correct = fan_route_n = 0
         model.train(False)
         for i, d in enumerate(vloader):
             input_dict, target, wt, aux_target = move_batch(d, device)
@@ -356,13 +332,6 @@ if __name__ == '__main__':
                     aux_pred['risk_loss'].sigmoid()[play_legal],
                     aux_target['risk_loss'].float()[play_legal], reduction = 'sum').item()
                 risk_severity_n += int(play_legal.sum().item())
-                chosen_value = aux_pred['action_value'].gather(1, target.unsqueeze(1)).squeeze(1).tanh()
-                action_value_abs += F.l1_loss(
-                    chosen_value, aux_target['score'].float(), reduction = 'sum').item()
-                action_value_n += int(target.shape[0])
-                fan_route_correct += int((aux_pred['fan_route'].argmax(dim = 1)
-                                          == aux_target['fan_route'].long()).sum().item())
-                fan_route_n += int(target.shape[0])
         acc = correct / max(1, policy_total)
         val_loss = total_loss / max(1, policy_total)
         risk_precision = risk_tp / max(1, risk_tp + risk_fp)
@@ -370,13 +339,10 @@ if __name__ == '__main__':
         tenpai_precision = tenpai_tp / max(1, tenpai_tp + tenpai_fp)
         tenpai_recall = tenpai_tp / max(1, tenpai_tp + tenpai_fn)
         print('Validation policy_acc=%.4f loss=%.4f risk_precision=%.4f risk_recall=%.4f '
-              'tenpai_precision=%.4f tenpai_recall=%.4f severity_mae=%.4f '
-              'action_value_mae=%.4f fan_route_acc=%.4f' %
+              'tenpai_precision=%.4f tenpai_recall=%.4f severity_mae=%.4f' %
               (acc, val_loss, risk_precision, risk_recall,
                tenpai_precision, tenpai_recall,
-               risk_severity_abs / max(1, risk_severity_n),
-               action_value_abs / max(1, action_value_n),
-               fan_route_correct / max(1, fan_route_n)), flush = True)
+               risk_severity_abs / max(1, risk_severity_n)), flush = True)
         cpu_state_dict = {k: v.detach().cpu() for k, v in checkpoint_model.state_dict().items()}
         # Save full checkpoint for resumption
         torch.save({

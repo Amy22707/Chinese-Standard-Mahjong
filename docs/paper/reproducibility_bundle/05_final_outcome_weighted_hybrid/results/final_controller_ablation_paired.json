@@ -1,0 +1,22 @@
+{
+  "final_light": {
+    "baseline": "final_raw",
+    "paired_walls": 966,
+    "paired_games": 3864,
+    "excluded_walls": 34,
+    "mean_score_delta": -0.22981366459627328,
+    "win_pair_fraction": 0.2950310559006211,
+    "ci95_low": -0.751565734989648,
+    "ci95_high": 0.29374353002070386
+  },
+  "final_risk": {
+    "baseline": "final_raw",
+    "paired_walls": 976,
+    "paired_games": 3904,
+    "excluded_walls": 24,
+    "mean_score_delta": 0.1680327868852459,
+    "win_pair_fraction": 0.22131147540983606,
+    "ci95_low": -0.22029328893442623,
+    "ci95_high": 0.5499615778688522
+  }
+}

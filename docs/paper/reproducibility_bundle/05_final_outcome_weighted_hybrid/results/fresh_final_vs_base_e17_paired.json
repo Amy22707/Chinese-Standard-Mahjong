@@ -1,0 +1,12 @@
+{
+  "final_hybrid": {
+    "baseline": "base_e17",
+    "paired_walls": 967,
+    "paired_games": 3868,
+    "excluded_walls": 33,
+    "mean_score_delta": 0.6765770423991727,
+    "win_pair_fraction": 0.4074457083764219,
+    "ci95_low": -0.1385793691830403,
+    "ci95_high": 1.4829756980351596
+  }
+}

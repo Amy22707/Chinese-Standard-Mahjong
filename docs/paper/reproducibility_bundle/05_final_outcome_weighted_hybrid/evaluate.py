@@ -30,7 +30,8 @@ import torch
 
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-RL_DIR = os.path.abspath(os.path.join(HERE, '..', 'RL'))
+RL_DIR = os.environ.get('MAHJONG_RL_DIR', os.path.abspath(
+    os.path.join(HERE, '..', '..', '..', '..', 'src', 'RL')))
 if HERE not in sys.path:
     sys.path.insert(0, HERE)
 if RL_DIR not in sys.path:

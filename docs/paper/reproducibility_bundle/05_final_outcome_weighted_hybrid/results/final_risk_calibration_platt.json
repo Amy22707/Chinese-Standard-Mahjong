@@ -1,0 +1,543 @@
+{
+  "checkpoint": "/root/autodl-tmp/Chinese-Standard-Mahjong-Lab/docs/paper/reproducibility_bundle/05_final_outcome_weighted_hybrid/model.pkl",
+  "checkpoint_sha256": "fa14dc7a045b9139fbc306668879d4073401a8f5251163e92d92920e7b7ef7dd",
+  "split": {
+    "model_training": [
+      0.0,
+      0.9
+    ],
+    "calibrator_fit": [
+      0.9,
+      0.95
+    ],
+    "calibrator_test": [
+      0.95,
+      1.0
+    ]
+  },
+  "fit_dataset_samples": 293975,
+  "fit_processed_samples": 293975,
+  "test_dataset_samples": 295427,
+  "test": {
+    "processed_samples": 295427,
+    "raw": {
+      "aggregate_risk": {
+        "count": 2318065,
+        "positives": 43867,
+        "prevalence": 0.018923973227670494,
+        "auroc_histogram_approx": 0.8779130750178691,
+        "auprc_histogram_approx": 0.13255054667658647,
+        "brier_score": 0.1532925338691345,
+        "expected_calibration_error_10bin": 0.25995183542678024,
+        "reliability": [
+          {
+            "low": 0.0,
+            "high": 0.1,
+            "count": 1008027,
+            "mean_probability": 0.02025008526112713,
+            "positive_frequency": 0.0004593130937960987
+          },
+          {
+            "low": 0.1,
+            "high": 0.2,
+            "count": 210960,
+            "mean_probability": 0.147208272742484,
+            "positive_frequency": 0.0037684869169510807
+          },
+          {
+            "low": 0.2,
+            "high": 0.3,
+            "count": 171032,
+            "mean_probability": 0.2490718797644876,
+            "positive_frequency": 0.006753122222741943
+          },
+          {
+            "low": 0.3,
+            "high": 0.4,
+            "count": 158995,
+            "mean_probability": 0.34985028041594096,
+            "positive_frequency": 0.011100978018176673
+          },
+          {
+            "low": 0.4,
+            "high": 0.5,
+            "count": 159563,
+            "mean_probability": 0.45021731516409175,
+            "positive_frequency": 0.0165514561646497
+          },
+          {
+            "low": 0.5,
+            "high": 0.6,
+            "count": 161284,
+            "mean_probability": 0.5501106641285831,
+            "positive_frequency": 0.024490960045633788
+          },
+          {
+            "low": 0.6,
+            "high": 0.7,
+            "count": 158825,
+            "mean_probability": 0.6494477218495529,
+            "positive_frequency": 0.036656697623170156
+          },
+          {
+            "low": 0.7,
+            "high": 0.8,
+            "count": 147097,
+            "mean_probability": 0.7487506302946704,
+            "positive_frequency": 0.05926021604791396
+          },
+          {
+            "low": 0.8,
+            "high": 0.9,
+            "count": 110553,
+            "mean_probability": 0.8460772404440778,
+            "positive_frequency": 0.10660949951606921
+          },
+          {
+            "low": 0.9,
+            "high": 1.0,
+            "count": 31729,
+            "mean_probability": 0.9258059673430455,
+            "positive_frequency": 0.21346402344858018
+          }
+        ]
+      },
+      "opponent_risk": {
+        "count": 6954195,
+        "positives": 43484,
+        "prevalence": 0.006252916405133879,
+        "auroc_histogram_approx": 0.8888489895964907,
+        "auprc_histogram_approx": 0.05470749960366582,
+        "brier_score": 0.06299462782310376,
+        "expected_calibration_error_10bin": 0.1438174907097405,
+        "reliability": [
+          {
+            "low": 0.0,
+            "high": 0.1,
+            "count": 4163109,
+            "mean_probability": 0.0184802859903649,
+            "positive_frequency": 0.00042324138042025805
+          },
+          {
+            "low": 0.1,
+            "high": 0.2,
+            "count": 795852,
+            "mean_probability": 0.14662458515807417,
+            "positive_frequency": 0.00347175102908581
+          },
+          {
+            "low": 0.2,
+            "high": 0.3,
+            "count": 578407,
+            "mean_probability": 0.24792785925257588,
+            "positive_frequency": 0.006384777500963854
+          },
+          {
+            "low": 0.3,
+            "high": 0.4,
+            "count": 448808,
+            "mean_probability": 0.3482133150704978,
+            "positive_frequency": 0.010621468423022763
+          },
+          {
+            "low": 0.4,
+            "high": 0.5,
+            "count": 351931,
+            "mean_probability": 0.44786068684255426,
+            "positive_frequency": 0.016307173849419345
+          },
+          {
+            "low": 0.5,
+            "high": 0.6,
+            "count": 265860,
+            "mean_probability": 0.5474430831555435,
+            "positive_frequency": 0.02439253742571278
+          },
+          {
+            "low": 0.6,
+            "high": 0.7,
+            "count": 187772,
+            "mean_probability": 0.6464575096208398,
+            "positive_frequency": 0.03702362439554353
+          },
+          {
+            "low": 0.7,
+            "high": 0.8,
+            "count": 114382,
+            "mean_probability": 0.7443832537664369,
+            "positive_frequency": 0.05771012921613541
+          },
+          {
+            "low": 0.8,
+            "high": 0.9,
+            "count": 44134,
+            "mean_probability": 0.8381424747242333,
+            "positive_frequency": 0.0921285176961073
+          },
+          {
+            "low": 0.9,
+            "high": 1.0,
+            "count": 3940,
+            "mean_probability": 0.9206364101110981,
+            "positive_frequency": 0.166497461928934
+          }
+        ]
+      },
+      "opponent_tenpai": {
+        "count": 886281,
+        "positives": 148561,
+        "prevalence": 0.16762290966409074,
+        "auroc_histogram_approx": 0.8784120586453545,
+        "auprc_histogram_approx": 0.5779473005842338,
+        "brier_score": 0.1532160121754233,
+        "expected_calibration_error_10bin": 0.18689064089184695,
+        "reliability": [
+          {
+            "low": 0.0,
+            "high": 0.1,
+            "count": 311317,
+            "mean_probability": 0.02422009114573542,
+            "positive_frequency": 0.004721875130493998
+          },
+          {
+            "low": 0.1,
+            "high": 0.2,
+            "count": 78353,
+            "mean_probability": 0.14724165163132147,
+            "positive_frequency": 0.031536763110538206
+          },
+          {
+            "low": 0.2,
+            "high": 0.3,
+            "count": 62639,
+            "mean_probability": 0.24898009495948395,
+            "positive_frequency": 0.06280432318523603
+          },
+          {
+            "low": 0.3,
+            "high": 0.4,
+            "count": 57988,
+            "mean_probability": 0.3497811786795991,
+            "positive_frequency": 0.09905497689177072
+          },
+          {
+            "low": 0.4,
+            "high": 0.5,
+            "count": 57368,
+            "mean_probability": 0.44999270797141544,
+            "positive_frequency": 0.143512062473853
+          },
+          {
+            "low": 0.5,
+            "high": 0.6,
+            "count": 61068,
+            "mean_probability": 0.5506143814023933,
+            "positive_frequency": 0.19167157922316105
+          },
+          {
+            "low": 0.6,
+            "high": 0.7,
+            "count": 67909,
+            "mean_probability": 0.6509170857006882,
+            "positive_frequency": 0.26751976910276987
+          },
+          {
+            "low": 0.7,
+            "high": 0.8,
+            "count": 77722,
+            "mean_probability": 0.7514340423032396,
+            "positive_frequency": 0.37843853735107175
+          },
+          {
+            "low": 0.8,
+            "high": 0.9,
+            "count": 83210,
+            "mean_probability": 0.8491045113123319,
+            "positive_frequency": 0.5500180266794856
+          },
+          {
+            "low": 0.9,
+            "high": 1.0,
+            "count": 28707,
+            "mean_probability": 0.9246011630583612,
+            "positive_frequency": 0.7544152994043265
+          }
+        ]
+      }
+    },
+    "calibrated": {
+      "aggregate_risk": {
+        "count": 2318065,
+        "positives": 43867,
+        "prevalence": 0.018923973227670494,
+        "auroc_histogram_approx": 0.8773753168537725,
+        "auprc_histogram_approx": 0.13253984104661415,
+        "brier_score": 0.017315527196641055,
+        "expected_calibration_error_10bin": 0.0003325603841260928,
+        "reliability": [
+          {
+            "low": 0.0,
+            "high": 0.1,
+            "count": 2228646,
+            "mean_probability": 0.013630561068393266,
+            "positive_frequency": 0.013431922342085732
+          },
+          {
+            "low": 0.1,
+            "high": 0.2,
+            "count": 74187,
+            "mean_probability": 0.13506036542098404,
+            "positive_frequency": 0.1369242589672045
+          },
+          {
+            "low": 0.2,
+            "high": 0.3,
+            "count": 12414,
+            "mean_probability": 0.23741745977869827,
+            "positive_frequency": 0.2294989527952312
+          },
+          {
+            "low": 0.3,
+            "high": 0.4,
+            "count": 2280,
+            "mean_probability": 0.3372205933778858,
+            "positive_frequency": 0.31973684210526315
+          },
+          {
+            "low": 0.4,
+            "high": 0.5,
+            "count": 439,
+            "mean_probability": 0.4376861154654293,
+            "positive_frequency": 0.3804100227790433
+          },
+          {
+            "low": 0.5,
+            "high": 0.6,
+            "count": 88,
+            "mean_probability": 0.5441680361760359,
+            "positive_frequency": 0.2727272727272727
+          },
+          {
+            "low": 0.6,
+            "high": 0.7,
+            "count": 10,
+            "mean_probability": 0.6487984019562247,
+            "positive_frequency": 0.4
+          },
+          {
+            "low": 0.7,
+            "high": 0.8,
+            "count": 1,
+            "mean_probability": 0.7577610013039445,
+            "positive_frequency": 1.0
+          },
+          {
+            "low": 0.8,
+            "high": 0.9,
+            "count": 0,
+            "mean_probability": 0.0,
+            "positive_frequency": 0.0
+          },
+          {
+            "low": 0.9,
+            "high": 1.0,
+            "count": 0,
+            "mean_probability": 0.0,
+            "positive_frequency": 0.0
+          }
+        ]
+      },
+      "opponent_risk": {
+        "count": 6954195,
+        "positives": 43484,
+        "prevalence": 0.006252916405133879,
+        "auroc_histogram_approx": 0.8862097723556057,
+        "auprc_histogram_approx": 0.05470255361619214,
+        "brier_score": 0.00603975396416963,
+        "expected_calibration_error_10bin": 8.836177048240706e-05,
+        "reliability": [
+          {
+            "low": 0.0,
+            "high": 0.1,
+            "count": 6934062,
+            "mean_probability": 0.005968881127013978,
+            "positive_frequency": 0.005918320314989973
+          },
+          {
+            "low": 0.1,
+            "high": 0.2,
+            "count": 18832,
+            "mean_probability": 0.12649704617726878,
+            "positive_frequency": 0.11528249787595582
+          },
+          {
+            "low": 0.2,
+            "high": 0.3,
+            "count": 1103,
+            "mean_probability": 0.23120184070370245,
+            "positive_frequency": 0.20670897552130554
+          },
+          {
+            "low": 0.3,
+            "high": 0.4,
+            "count": 152,
+            "mean_probability": 0.3376182662986469,
+            "positive_frequency": 0.23026315789473684
+          },
+          {
+            "low": 0.4,
+            "high": 0.5,
+            "count": 37,
+            "mean_probability": 0.45017735096528844,
+            "positive_frequency": 0.24324324324324326
+          },
+          {
+            "low": 0.5,
+            "high": 0.6,
+            "count": 9,
+            "mean_probability": 0.5234038628317603,
+            "positive_frequency": 0.3333333333333333
+          },
+          {
+            "low": 0.6,
+            "high": 0.7,
+            "count": 0,
+            "mean_probability": 0.0,
+            "positive_frequency": 0.0
+          },
+          {
+            "low": 0.7,
+            "high": 0.8,
+            "count": 0,
+            "mean_probability": 0.0,
+            "positive_frequency": 0.0
+          },
+          {
+            "low": 0.8,
+            "high": 0.9,
+            "count": 0,
+            "mean_probability": 0.0,
+            "positive_frequency": 0.0
+          },
+          {
+            "low": 0.9,
+            "high": 1.0,
+            "count": 0,
+            "mean_probability": 0.0,
+            "positive_frequency": 0.0
+          }
+        ]
+      },
+      "opponent_tenpai": {
+        "count": 886281,
+        "positives": 148561,
+        "prevalence": 0.16762290966409074,
+        "auroc_histogram_approx": 0.8784071531612568,
+        "auprc_histogram_approx": 0.5779424232095721,
+        "brier_score": 0.09717034947810646,
+        "expected_calibration_error_10bin": 0.0040731472850496515,
+        "reliability": [
+          {
+            "low": 0.0,
+            "high": 0.1,
+            "count": 487356,
+            "mean_probability": 0.022037481351659442,
+            "positive_frequency": 0.022708246128087067
+          },
+          {
+            "low": 0.1,
+            "high": 0.2,
+            "count": 110563,
+            "mean_probability": 0.1461539707013861,
+            "positive_frequency": 0.14503947975362463
+          },
+          {
+            "low": 0.2,
+            "high": 0.3,
+            "count": 79512,
+            "mean_probability": 0.24799070647951596,
+            "positive_frequency": 0.2374107053023443
+          },
+          {
+            "low": 0.3,
+            "high": 0.4,
+            "count": 63184,
+            "mean_probability": 0.34882390835628224,
+            "positive_frequency": 0.3332330969865789
+          },
+          {
+            "low": 0.4,
+            "high": 0.5,
+            "count": 53100,
+            "mean_probability": 0.4493470695590644,
+            "positive_frequency": 0.43548022598870056
+          },
+          {
+            "low": 0.5,
+            "high": 0.6,
+            "count": 41725,
+            "mean_probability": 0.5482491034286235,
+            "positive_frequency": 0.5458358298382265
+          },
+          {
+            "low": 0.6,
+            "high": 0.7,
+            "count": 30267,
+            "mean_probability": 0.6451933029733813,
+            "positive_frequency": 0.6479994713714606
+          },
+          {
+            "low": 0.7,
+            "high": 0.8,
+            "count": 16877,
+            "mean_probability": 0.7420471880217288,
+            "positive_frequency": 0.7594359187059312
+          },
+          {
+            "low": 0.8,
+            "high": 0.9,
+            "count": 3633,
+            "mean_probability": 0.8313653209807382,
+            "positive_frequency": 0.8623726947426369
+          },
+          {
+            "low": 0.9,
+            "high": 1.0,
+            "count": 64,
+            "mean_probability": 0.9152103275640424,
+            "positive_frequency": 1.0
+          }
+        ]
+      }
+    },
+    "positive_deal_in_severity_mae": 0.23441229017236254,
+    "positive_deal_in_severity_count": 43867
+  },
+  "calibrators": {
+    "aggregate_risk": {
+      "scale": 0.9943473976753283,
+      "bias": -3.862367147059789,
+      "fit_log_loss": 0.07337374870886451,
+      "count": 2312726,
+      "positives": 44259,
+      "prevalence": 0.019137156757869284
+    },
+    "opponent_risk": {
+      "scale": 0.9942562707973369,
+      "bias": -3.8867262705833343,
+      "fit_log_loss": 0.030577812013494195,
+      "count": 6938178,
+      "positives": 44016,
+      "prevalence": 0.0063440286484434385
+    },
+    "opponent_tenpai": {
+      "scale": 1.0437914900188805,
+      "bias": -1.5984239737774577,
+      "fit_log_loss": 0.3040800258867131,
+      "count": 881925,
+      "positives": 149315,
+      "prevalence": 0.16930577996995208
+    }
+  },
+  "metric_note": "AUROC/AUPRC use 1000-bin streaming approximations. Platt parameters are fit only on the calibration split."
+}

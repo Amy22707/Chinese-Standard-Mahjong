@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "paper_label": "Base-E17",
+  "role": "Last base-run checkpoint and initialization for outcome-weighted continuation",
+  "code_origin": "models and logs/SL/17",
+  "model_origin": "models and logs/SL/17/best17.pkl",
+  "model_file": "model.pkl",
+  "model_sha256": "1dc861efd1c87f025d9360afcebf7411553862a38cb1b7a939e280a75dbeca9c",
+  "checkpoint_format": "full training checkpoint",
+  "model_tensor_count": 126,
+  "training_lineage": "shared base supervised run",
+  "checkpoint_index": 17,
+  "validation_epoch": 18,
+  "validation_loss": 0.34873592460442804,
+  "policy_accuracy": 0.8692594709065851
+}

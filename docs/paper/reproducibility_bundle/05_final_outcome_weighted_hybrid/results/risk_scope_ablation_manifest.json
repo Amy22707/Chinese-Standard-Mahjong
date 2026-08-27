@@ -1,0 +1,50 @@
+{
+  "seed": 2026105000,
+  "device": "cuda",
+  "walls": 1000,
+  "seats_per_wall": 4,
+  "postprocess": "light",
+  "opponent_postprocess": "light",
+  "raw_challenger": [],
+  "tenpai_learned_weight": 1.0,
+  "normalize_discard_logits": false,
+  "fan_wait_weight": 0.0,
+  "action_value_weight": 0.0,
+  "fan_route_weight": 0.0,
+  "use_expected_loss_head": false,
+  "risk_challenger": [
+    "aggregate_risk",
+    "opponent_specific"
+  ],
+  "aggregate_risk_challenger": [
+    "aggregate_risk"
+  ],
+  "zero_sequence_challenger": [],
+  "risk_calibration": {},
+  "aux_rank_challenger": [],
+  "opponent_use_risk_head": false,
+  "opponent_risk_calibration": null,
+  "opponent_use_aux_rank": false,
+  "max_steps": 500,
+  "bootstrap_samples": 10000,
+  "bootstrap_cluster": "wall",
+  "include_invalid_walls": false,
+  "opponent": {
+    "path": "../03_base_epoch16_reference/model.pkl",
+    "sha256": "aac83d00ea6d983674180765898d0b93ab95b6b55ff9fa064a2664f90dd9f1f5"
+  },
+  "challengers": [
+    {
+      "name": "aggregate_risk",
+      "path": "model.pkl",
+      "sha256": "fa14dc7a045b9139fbc306668879d4073401a8f5251163e92d92920e7b7ef7dd"
+    },
+    {
+      "name": "opponent_specific",
+      "path": "model.pkl",
+      "sha256": "fa14dc7a045b9139fbc306668879d4073401a8f5251163e92d92920e7b7ef7dd"
+    }
+  ],
+  "torch_version": "2.8.0+cu128",
+  "numpy_version": "2.3.2"
+}
