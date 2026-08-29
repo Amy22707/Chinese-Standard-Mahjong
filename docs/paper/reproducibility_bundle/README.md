@@ -39,7 +39,7 @@ RTX 5090 基础训练日志及从中提取的 CSV 位于 `03_base_epoch16_refere
 
 版本 1--11 没有支撑论文中的定量结论，其中一些也缺少完整可靠的代码—checkpoint 绑定。版本 12、14、16、17 是唯一一条具有完整训练日志的基础训练轨迹中的代表性节点。版本 13 不会提供超出原始密集 checkpoint sweep 的论文证据，因此不重复收录。版本 18 和 19 合并表示为 `05_final_outcome_weighted_hybrid`：版本 19 提供已核验的比赛源代码，版本 18 提供匹配的最终权重。
 
-A--F 完成结果、剩余论文实验和可直接在 AutoDL 执行的复现命令见 `EXPERIMENT_PLAN.md`。如果审稿人要求补做结果加权的因果消融，完整的数据传输、预处理、训练、评测、打包和下载流程见 `OWBC_CONTROLLED_RETRAINING.md`。
+A--F 完成结果、剩余论文实验和可直接在 AutoDL 执行的复现命令见 `EXPERIMENT_PLAN.md`。数据来源、公开镜像检查、文件完整性信息及授权 TODO 见 `DATA_PROVENANCE.md`。如果审稿人要求补做结果加权的因果消融，完整的数据传输、预处理、训练、评测、打包和下载流程见 `OWBC_CONTROLLED_RETRAINING.md`。
 
 ## English
 
@@ -80,4 +80,4 @@ The default configuration does not change feature construction, network weights,
 
 Versions 1--11 are not used by a quantitative claim in the paper and several lack a complete code--checkpoint binding. Versions 12, 14, 16, and 17 are representative points from the one fully logged base run. Version 13 is omitted because it adds no paper-specific comparison beyond the denser checkpoint sweep already preserved in the original archive. Versions 18/19 are represented once as `05_final_outcome_weighted_hybrid`: version 19 supplies the verified submission source and version 18 supplies the matching final weights.
 
-All originally planned A--F experiments are complete. See `EXPERIMENT_PLAN.md` for results and retained AutoDL commands. If a reviewer requests a controlled outcome-weighting ablation, follow `OWBC_CONTROLLED_RETRAINING.md` from upload through local checksum verification.
+All originally planned A--F experiments are complete. See `EXPERIMENT_PLAN.md` for results and retained AutoDL commands, and `DATA_PROVENANCE.md` for the source audit, integrity record, and licensing TODO. If a reviewer requests a controlled outcome-weighting ablation, follow `OWBC_CONTROLLED_RETRAINING.md` from upload through local checksum verification.
