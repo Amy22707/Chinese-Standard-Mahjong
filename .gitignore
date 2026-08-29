@@ -3,20 +3,25 @@ __pycache__/
 *.py[cod]
 *$py.class
 .pytest_cache/
+.hypothesis/
 .mypy_cache/
 .ruff_cache/
+.pytype/
+.pyright/
 .ipynb_checkpoints/
 .coverage
 .coverage.*
 htmlcov/
 .tox/
 .nox/
+.cache/
 .venv/
 venv/
 env/
 build/
 dist/
 *.egg-info/
+pip-wheel-metadata/
 
 # Editor and operating-system metadata
 .obsidian/
@@ -38,26 +43,52 @@ Desktop.ini
 .env
 .env.*
 !.env.example
+*.pem
+*.key
+credentials.json
 
+# LaTeX intermediate files (keep source .tex and intentional final PDFs)
 *.aux
 *.bbl
 *.bcf
 *.blg
+*.dvi
 *.fdb_latexmk
 *.fls
+*.lof
 *.log
+*.lot
 *.nav
 *.out
+*.pdfsync
+*.ps
 *.snm
 *.synctex.gz
+*.synctex(busy)
 *.toc
 *.xdv
 *.run.xml
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.ist
+*.loa
+*.lol
+*.listing
+_minted-*/
+missfont.log
+
+# Archives and serialized models/data
 *.zip
 *.7z
 *.tar
 *.tar.gz
 *.py36
+*.pickle
+*.joblib
 *.pkl
 *.pt
 *.pth
@@ -66,6 +97,10 @@ Desktop.ini
 *.safetensors
 *.npy
 *.npz
+*.h5
+*.hdf5
+*.parquet
+*.feather
 *.sqlite
 *.sqlite3
 *.db
@@ -73,12 +108,24 @@ Desktop.ini
 *-shm
 events.out.tfevents.*
 
-outputs/
-results/
-checkpoints/
-model/
-runs/
-wandb/
+# Generated training/evaluation output. Scope these rules so that reviewed
+# CSV/JSON evidence in docs/paper/reproducibility_bundle can still be added.
+/outputs/
+/results/
+/checkpoints/
+/model/
+/runs/
+/wandb/
+/mlruns/
+/lightning_logs/
+/src/**/outputs/
+/src/**/results/
+/src/**/checkpoints/
+/src/**/model/
+/src/**/runs/
+/src/**/wandb/
+/src/**/mlruns/
+/src/**/lightning_logs/
 /tmp/
 
 # Local development archive. Paper-facing checkpoint-bound snapshots and
